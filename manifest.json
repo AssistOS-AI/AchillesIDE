@@ -8,8 +8,11 @@
   "components": [
     {
       "name": "achilles-ide-landing",
-      "presenterClassName": "AchillesIdeLanding",
-      "type": "pages"
+      "presenterClassName": "AchillesIdeLanding"
+    },
+    {
+      "name": "achilles-ide-code-edit",
+      "presenterClassName": "CodeEdit"
     }
   ],
   "services": [

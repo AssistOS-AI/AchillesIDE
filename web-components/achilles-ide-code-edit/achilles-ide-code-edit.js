@@ -1,4 +1,4 @@
-export class AchillesIdeLanding {
+export class CodeEdit {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
@@ -7,13 +7,12 @@ export class AchillesIdeLanding {
 
     async beforeRender() {
 
-  
+
     }
 
 
     async afterRender() {
 
     }
-    openEditor
 }
-  
+
