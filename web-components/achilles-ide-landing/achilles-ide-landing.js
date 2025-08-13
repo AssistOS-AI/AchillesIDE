@@ -1,3 +1,4 @@
+import manager from "../../manager.js"
 export class AchillesIdeLanding {
     constructor(element, invalidate) {
         this.element = element;
@@ -14,6 +15,8 @@ export class AchillesIdeLanding {
     async afterRender() {
 
     }
-    openEditor
+    async openEditor(){
+        await manager.navigateInternal("achilles-ide-code-edit", "achilles-ide-code-edit")
+    }
 }
   

@@ -1,12 +1,13 @@
-import {RoutingService} from "./services/RoutingService.js";
-
-export class Manager {
+import {ClientService} from "./services/ClientService.js";
+//import manifest from "./manifest.json"
+class Manager {
     constructor() {
         this.appName = "AchillesIDE";
         this.services = new Map();
-        this.services.set('RoutingService', new RoutingService());
+        this.services.set('ClientService', new ClientService());
     }
-    async navigateToLocation(location) {
-        this.services.get('RoutingService').navigateToLocation(location, this.appName);
+    async navigateInternal(pageName, url, objectData) {
+        await assistOS.UI.changeToDynamicPage(pageName, `${assistOS.space.id}/${this.appName}/${url}`, objectData)
     }
 }
+export default new Manager();
