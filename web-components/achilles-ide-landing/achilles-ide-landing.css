@@ -1,0 +1,30 @@
+.achilles-ide-landing {
+    padding: 2rem;
+}
+
+.achilles-ide-landing h1 {
+    margin-bottom: 1rem;
+}
+
+.contexts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.context-item {
+    padding: 1.5rem;
+    border: 1px solid var(--light-gray-border);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.context-item:hover {
+    background-color: var(--option-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}

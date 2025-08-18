@@ -12,7 +12,11 @@
     },
     {
       "name": "achilles-ide-code-edit",
-      "presenterClassName": "CodeEdit"
+      "presenterClassName": "AchillesIdeCodeEdit"
+    },
+    {
+      "name": "achilles-ide-component-edit",
+      "presenterClassName": "AchillesIdeComponentEdit"
     }
   ],
   "services": [
