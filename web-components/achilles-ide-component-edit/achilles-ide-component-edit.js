@@ -1,5 +1,3 @@
-const CodeManager = assistOS.loadModule("codemanager", {});
-
 export class AchillesIdeComponentEdit {
     constructor(element, invalidate) {
         this.element = element;
@@ -27,7 +25,7 @@ export class AchillesIdeComponentEdit {
     }
 
     updateComponentTemplates(fileName) {
-        const pascalCaseName = fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+        const pascalCaseName = fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
         this.state.html = `<!-- HTML for ${fileName} -->\n<div class="${fileName}">\n    \n</div>`;
         this.state.css = `/* CSS for ${fileName} */\n.${fileName} {\n\n}`;
         this.state.js = `export class ${pascalCaseName} {\n    constructor(element, invalidate) {\n        this.element = element;\n        this.invalidate = invalidate;\n        this.invalidate();\n    }\n\n    beforeRender() {\n\n    }\n\n    afterRender() {\n\n    }\n}`;
@@ -36,9 +34,9 @@ export class AchillesIdeComponentEdit {
     renderWebSkelEditor() {
         this.itemList = ""; // No sidebar
         this.pageTitle = `<span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" data-local-action="editName">`;
-        const pascalCaseName = this.state.fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
-        this.state.html = `<!-- HTML for ${this.state.fileName} -->\n<div class="${this.state.fileName}">\n    \n</div>`;
-        this.state.css = `/* CSS for ${this.state.fileName} */\n.${this.state.fileName} {\n\n}`;
+        const pascalCaseName = this.state.fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
+        this.state.html = `<!-- HTML for ${this.state.fileName} -->\n<div class="${this.state.fileName.replace(/[^a-zA-Z0-9]/g, '-')}">\n    \n</div>`;
+        this.state.css = `/* CSS for ${this.state.fileName} */\n.${this.state.fileName.replace(/[^a-zA-Z0-9]/g, '-')} {\n\n}`;
         this.state.js = `export class ${pascalCaseName} {\n    constructor(element, invalidate) {\n        this.element = element;\n        this.invalidate = invalidate;\n        this.invalidate();\n    }\n\n    beforeRender() {\n\n    }\n\n    afterRender() {\n\n    }\n}`;
         this.state.editorContent = this.state.html;
         let htmlContext = JSON.parse(JSON.stringify(this.context));

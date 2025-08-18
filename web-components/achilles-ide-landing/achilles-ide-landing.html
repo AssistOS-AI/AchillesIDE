@@ -1,7 +1,17 @@
 <div class="achilles-ide-landing">
     <h1>Achilles IDE</h1>
-    <p>Select a context to start editing:</p>
-    <div class="contexts-container">
-        $$contextList
-    </div>
+    <section class="new-application-section">
+        <div class="input-group">
+            <label for="applicationName">Application Name:</label>
+            <input type="text" id="applicationName" placeholder="Enter application name">
+        </div>
+
+        <button class="general-button" data-local-action="newApplication">Create Application</button>
+    </section>
+    <section class="context-section">
+        <p>Select a context to start editing:</p>
+        <div class="contexts-container">
+            $$contextList
+        </div>
+    </section>
 </div>

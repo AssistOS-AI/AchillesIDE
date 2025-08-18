@@ -256,18 +256,18 @@ export class AchillesIdeCodeEdit {
 
     async saveName(event) {
         if (event.key === 'Enter' || event.type === 'blur') {
-            const newName = event.target.value;
+            const newName = event.target.value.replace(/[^a-zA-Z0-9]/g, '-');
 
             if (newName && newName !== this.state.fileName) {
-                const oldName = this.state.fileName;
-                const oldPascalCaseName = oldName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+                const oldName = this.state.fileName.replace(/[^a-zA-Z0-9]/g, '-');
+                const oldPascalCaseName = oldName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
 
                 this.state.fileName = newName;
-                const newPascalCaseName = newName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+                const newPascalCaseName = newName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
                 if (this.state.fileType === "js") {
                     this.textarea.value = this.textarea.value.replaceAll(oldPascalCaseName, newPascalCaseName);
                 } else {
-                    this.textarea.value = this.textarea.value.replaceAll(oldName, newName);
+                    this.textarea.value = this.textarea.value.replaceAll(oldName, newName.replace(/[^a-zA-Z0-9]/g, '-'));
                 }
                 this.syncHighlight();
             }
@@ -278,8 +278,8 @@ export class AchillesIdeCodeEdit {
 
     async saveCode() {
         if (!this.state.fileName) return;
-        const filePath = this.context.singleFile ? `${this.state.fileName}.${this.state.fileType}` : `${this.state.fileName}/${this.state.fileName}.${this.state.fileType}`;
-        await CodeManager.saveCode(assistOS.space.id, filePath, this.state.editorContent);
+        const folder = this.context.singleFile ? `${this.context.appName}/${this.context.folder}` : `${this.context.appName}/${this.context.folder}/${this.state.fileName}`;
+        await CodeManager.saveCode(assistOS.space.id, `${folder}`, `${this.state.fileName}.${this.state.fileType}`, this.state.editorContent);
         assistOS.showToast("Code saved successfully!", "success");
     }
 }
