@@ -17,7 +17,15 @@
     {
       "name": "achilles-ide-component-edit",
       "presenterClassName": "AchillesIdeComponentEdit"
-    }
+    },
+      {
+          "name": "widgets-page",
+          "presenterClassName": "WidgetsPage"
+      },
+      {
+          "name": "edit-widget-modal",
+          "presenterClassName": "EditWidgetModal"
+      }
   ],
   "services": [
     {
