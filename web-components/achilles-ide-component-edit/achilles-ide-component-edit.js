@@ -1,3 +1,5 @@
+import {getTemplate} from "../../utils/code-templates-utils.js";
+
 export class AchillesIdeComponentEdit {
     constructor(element, invalidate) {
         this.element = element;
@@ -14,30 +16,15 @@ export class AchillesIdeComponentEdit {
             js: "",
             isEditingName: false
         };
-        this.invalidate(async () => await this.initializeComponentState());
-    }
-
-    async initializeComponentState() {
-        this.updateComponentTemplates(this.state.fileName);
-        this.state.editorContent = this.state.html;
-        this.state.loading = false;
         this.invalidate();
-    }
-
-    updateComponentTemplates(fileName) {
-        const pascalCaseName = fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
-        this.state.html = `<!-- HTML for ${fileName} -->\n<div class="${fileName}">\n    \n</div>`;
-        this.state.css = `/* CSS for ${fileName} */\n.${fileName} {\n\n}`;
-        this.state.js = `export class ${pascalCaseName} {\n    constructor(element, invalidate) {\n        this.element = element;\n        this.invalidate = invalidate;\n        this.invalidate();\n    }\n\n    beforeRender() {\n\n    }\n\n    afterRender() {\n\n    }\n}`;
     }
 
     renderWebSkelEditor() {
         this.itemList = ""; // No sidebar
         this.pageTitle = `<span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" data-local-action="editName">`;
-        const pascalCaseName = this.state.fileName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('').replace(/[^a-zA-Z0-9]/g, '');
-        this.state.html = `<!-- HTML for ${this.state.fileName} -->\n<div class="${this.state.fileName.replace(/[^a-zA-Z0-9]/g, '-')}">\n    \n</div>`;
-        this.state.css = `/* CSS for ${this.state.fileName} */\n.${this.state.fileName.replace(/[^a-zA-Z0-9]/g, '-')} {\n\n}`;
-        this.state.js = `export class ${pascalCaseName} {\n    constructor(element, invalidate) {\n        this.element = element;\n        this.invalidate = invalidate;\n        this.invalidate();\n    }\n\n    beforeRender() {\n\n    }\n\n    afterRender() {\n\n    }\n}`;
+        this.state.html = getTemplate("html", this.state.fileName);
+        this.state.css = getTemplate("css", this.state.fileName);
+        this.state.js = getTemplate("js", this.state.fileName);
         this.state.editorContent = this.state.html;
         let htmlContext = JSON.parse(JSON.stringify(this.context));
         let cssContext = JSON.parse(JSON.stringify(this.context));
@@ -109,6 +96,8 @@ export class AchillesIdeComponentEdit {
 
     async beforeRender() {
         this.renderWebSkelEditor();
+        this.state.editorContent = this.state.html;
+        this.state.loading = false;
     }
 
     async afterRender() {

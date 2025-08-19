@@ -11,9 +11,7 @@ export class AchillesIdeCodeEdit {
             loading: false,
             fileType: this.context.fileType || "js"
         };
-        // The component is now "dumb" and doesn't fetch its own code.
-        // The parent component will be responsible for providing the content.
-        // For demonstration, we start with a blank template.
+
         this.invalidate(async () => {
             await this.initializeEditorState();
         });
