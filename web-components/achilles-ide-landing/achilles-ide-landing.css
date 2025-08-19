@@ -1,12 +1,10 @@
 .achilles-ide-landing {
     padding: 2rem;
     max-width: 900px;
-    margin: auto;
 }
 
 .achilles-ide-landing h1 {
     margin-bottom: 1rem;
-    color: var(--text-color);
     border-bottom: 1px solid var(--light-gray-border);
     padding-bottom: 0.5rem;
 }
@@ -20,9 +18,12 @@
 .input-group label {
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: var(--text-color-secondary);
 }
-
+.section-header{
+    margin-top: 20px;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
 .input-group input {
     padding: 0.75rem;
     border: 1px solid var(--light-gray-border);
@@ -30,23 +31,32 @@
     font-size: 1rem;
 }
 
-.general-button {
-    background-color: #0e639c;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: 13px;
+.apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--light-gray-border);
+    border-radius: 4px;
+    padding: 0.5rem;
 }
 
-.general-button:hover {
-    background-color: #1177bb;
+.app-item {
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.app-item:hover {
+    background-color: var(--option-hover);
 }
 
 .achilles-ide-landing p {
     font-size: 1.2rem;
-    color: var(--text-color);
     margin-top: 2rem;
 }
 
@@ -69,7 +79,6 @@
     text-align: center;
     font-size: 1.1rem;
     transition: all 0.2s ease-in-out;
-    background-color: var(--background-color);
 }
 
 .context-item:hover {

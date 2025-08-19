@@ -5,7 +5,7 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-export class EditWidgetModal {
+export class AddEditWidget {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;

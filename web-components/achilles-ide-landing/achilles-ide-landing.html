@@ -5,13 +5,18 @@
             <label for="applicationName">Application Name:</label>
             <input type="text" id="applicationName" placeholder="Enter application name">
         </div>
-
         <button class="general-button" data-local-action="newApplication">Create Application</button>
+
+        <div class="section-header">Your Applications:</div>
+        <div class="apps-list">
+            $$appsList
+        </div>
     </section>
     <section class="context-section">
+        <div class="section-header app-name"></div>
         <p>Select a context to start editing:</p>
         <div class="contexts-container">
-            $$contextList
+            $$pagesList
         </div>
     </section>
 </div>
