@@ -5,7 +5,8 @@ export class WidgetsPage {
         this.element = element;
         this.invalidate = invalidate;
         this.spaceId = assistOS.space.id;
-        this.appName = decodeURIComponent(this.element.getAttribute("data-app-name"));
+        let urlParts = window.location.hash.split("/");
+        this.appName = decodeURIComponent(urlParts[urlParts.length - 1]);
         this.invalidate();
     }
 

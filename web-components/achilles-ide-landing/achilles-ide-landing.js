@@ -53,7 +53,7 @@ export class AchillesIdeLanding {
         this.element.querySelector(".context-section").style.display = "block";
     }
     async openComponentPage(target, pageName){
-        await manager.navigateInternal(pageName, pageName, {appName: this.appName});
+        await manager.navigateInternal(pageName, `${pageName}/${encodeURIComponent(this.appName)}`);
     }
     async openEditor(target) {
         let context = JSON.parse(decodeURIComponent(target.getAttribute("data-context")));
