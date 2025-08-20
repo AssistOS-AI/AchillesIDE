@@ -8,7 +8,6 @@ export class AchillesIdeLanding {
         this.invalidate = invalidate;
         this.appPages = [
             {name: "WebSkel Components", component: "achilles-ide-web-components"},
-            {name: "Chat Widgets", component: "achilles-ide-widgets"},
             {name: "Persisto", component: "achilles-ide-persisto"},
             {name: "Backend Plugins", component: "achilles-ide-backend-plugins"},
             {name: "Document Plugins", component: "achilles-ide-doc-plugins"}
