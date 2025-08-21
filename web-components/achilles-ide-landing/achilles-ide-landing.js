@@ -1,16 +1,17 @@
 import manager from "../../manager.js"
 
-const codeManager = assistOS.loadModule("codemanager", {});
-
+const codeManager = assistOS.loadModule("codemanager");
+const chatModule = assistOS.loadModule("chat");
+const webAssistantModule = assistOS.loadModule("webassistant");
 export class AchillesIdeLanding {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
         this.appPages = [
-            {name: "WebSkel Components", component: "achilles-ide-web-components"},
-            {name: "Persisto", component: "achilles-ide-persisto"},
-            {name: "Backend Plugins", component: "achilles-ide-backend-plugins"},
-            {name: "Document Plugins", component: "achilles-ide-doc-plugins"}
+            {name: "WebSkel Components", component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
+            {name: "Persisto", component: "achilles-ide-persisto", scriptName:"PersistoVibe"},
+            {name: "Backend Plugins", component: "achilles-ide-backend-plugins", scriptName:"BackendPluginVibe"},
+            {name: "Document Plugins", component: "achilles-ide-doc-plugins", scriptName: "DocumentPluginVibe"}
         ];
         this.invalidate();
     }
@@ -23,7 +24,7 @@ export class AchillesIdeLanding {
         }
         this.pagesList = "";
         for (const page of this.appPages) {
-            this.pagesList += `<div class="context-item" data-local-action="openComponentPage ${page.component}">${page.name}</div>`;
+            this.pagesList += `<div class="context-item" data-local-action="openEditPage ${page.component}">${page.name}</div>`;
         }
     }
 
@@ -32,6 +33,7 @@ export class AchillesIdeLanding {
     }
 
     async newApplication() {
+        let webAssistant = webAssistantModule.getWebAssistant(assistOS.space.id);
         const appName = this.element.querySelector("#applicationName").value;
         if (!appName) {
             assistOS.showToast("App name is required", "error", 3000);
@@ -42,7 +44,10 @@ export class AchillesIdeLanding {
         assistOS.showToast("App created!", "success");
         this.element.querySelector(".new-application-section").style.display = "none";
         this.element.querySelector(".context-section").style.display = "block";
-
+        for(let appPage of this.appPages){
+            let chatId = appName + `_${appPage.name}` + "_Chat_" + crypto.randomUUID();
+            await chatModule.createChat(assistOS.space.id, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
+        }
     }
     openAppEditor(target, appName){
         this.appName = appName;
@@ -51,19 +56,8 @@ export class AchillesIdeLanding {
         this.element.querySelector(".new-application-section").style.display = "none";
         this.element.querySelector(".context-section").style.display = "block";
     }
-    async openComponentPage(target, pageName){
-        await manager.navigateInternal(pageName, `${pageName}/${encodeURIComponent(this.appName)}`);
-    }
-    async openEditor(target) {
-        let context = JSON.parse(decodeURIComponent(target.getAttribute("data-context")));
-        context.appName = this.appName;
-        context = encodeURIComponent(JSON.stringify(context))
-        const editorType = target.getAttribute("data-editor-type");
-        if (editorType !== "WebSkel Component") {
-            await manager.navigateInternal("achilles-ide-code-edit", "achilles-ide-code-edit", {context});
-        } else {
-            await manager.navigateInternal("achilles-ide-component-edit", "achilles-ide-component-edit", {context});
-        }
+    async openEditPage(target, pageName){
+        await manager.navigateInternal("achilles-ide-chat-page", `achilles-ide-chat-page/${pageName}/${encodeURIComponent(this.appName)}`);
     }
 }
   
