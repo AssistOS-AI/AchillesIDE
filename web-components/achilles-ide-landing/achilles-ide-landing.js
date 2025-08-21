@@ -33,7 +33,7 @@ export class AchillesIdeLanding {
     }
 
     async newApplication() {
-        let webAssistant = webAssistantModule.getWebAssistant(assistOS.space.id);
+        let webAssistant = await webAssistantModule.getWebAssistant(assistOS.space.id);
         const appName = this.element.querySelector("#applicationName").value;
         if (!appName) {
             assistOS.showToast("App name is required", "error", 3000);
@@ -46,7 +46,7 @@ export class AchillesIdeLanding {
         this.element.querySelector(".context-section").style.display = "block";
         for(let appPage of this.appPages){
             let chatId = appName + `_${appPage.name}` + "_Chat_" + crypto.randomUUID();
-            await chatModule.createChat(assistOS.space.id, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
+            await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
         }
     }
     openAppEditor(target, appName){
