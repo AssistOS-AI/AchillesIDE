@@ -1,3 +1,6 @@
+<div class="components-list">
+    $$componentsList
+</div>
 <div class="code-editor-container">
     <div class="main-content">
         <div class="page-header">
@@ -6,7 +9,19 @@
             </div>
         </div>
         <div class="editor-container">
-            $$editor
+            <div class="tabs-header">
+                <div class="tabs-list">
+                    <div class="tab tab-html active" data-local-action="changeTab html">HTML</div>
+                    <div class="tab tab-css" data-local-action="changeTab css">CSS</div>
+                    <div class="tab tab-js" data-local-action="changeTab js">JS</div>
+                </div>
+            </div>
+            <div class="tab-content">
+                $$tabContent
+            </div>
+            <div class="component-editor-footer">
+                <button class="general-button" data-local-action="saveComponent">Save Component</button>
+            </div>
         </div>
     </div>
 </div>
