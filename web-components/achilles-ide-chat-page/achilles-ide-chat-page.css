@@ -1,0 +1,10 @@
+achilles-ide-chat-page{
+    display: flex;
+    height: 100%;
+}
+.chat-room-container{
+    width: 50%;
+}
+.current-page-container{
+    width: 50%;
+}

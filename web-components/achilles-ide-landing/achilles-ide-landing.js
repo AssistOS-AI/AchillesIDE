@@ -31,7 +31,9 @@ export class AchillesIdeLanding {
     async afterRender() {
 
     }
-
+    getChatId(appName, pageName){
+        return  appName + `_${pageName}` + "_Chat";
+    }
     async newApplication() {
         let webAssistant = await webAssistantModule.getWebAssistant(assistOS.space.id);
         const appName = this.element.querySelector("#applicationName").value;
@@ -45,8 +47,9 @@ export class AchillesIdeLanding {
         this.element.querySelector(".new-application-section").style.display = "none";
         this.element.querySelector(".context-section").style.display = "block";
         for(let appPage of this.appPages){
-            let chatId = appName + `_${appPage.name}` + "_Chat_" + crypto.randomUUID();
+            let chatId = this.getChatId(appName, appPage.component);
             await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
+            appPage.chatId = chatId;
         }
     }
     openAppEditor(target, appName){
@@ -57,7 +60,7 @@ export class AchillesIdeLanding {
         this.element.querySelector(".context-section").style.display = "block";
     }
     async openEditPage(target, pageName){
-        await manager.navigateInternal("achilles-ide-chat-page", `achilles-ide-chat-page/${pageName}/${encodeURIComponent(this.appName)}`);
+        await manager.navigateInternal("achilles-ide-chat-page", `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${pageName}`);
     }
 }
   

@@ -4,12 +4,11 @@ export class AchillesIdeComponentEdit {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
-        this.context = JSON.parse(decodeURIComponent(this.element.getAttribute("data-context"))) || "WebSkel Components";
-
+        this.context = {};
         this.state = {
             editorContent: "",
             loading: true,
-            fileName: this.context.fileName,
+            fileName: "blank_",
             activeTab: "html",
             html: "",
             css: "",
