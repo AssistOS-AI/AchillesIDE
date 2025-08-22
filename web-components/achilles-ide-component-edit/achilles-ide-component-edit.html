@@ -1,20 +1,17 @@
-<div class="components-list">
-    $$componentsList
-</div>
 <div class="code-editor-container">
     <div class="main-content">
         <div class="page-header">
             <div class="left-header">
                 <button class="back-button" data-local-action="navigateBack">← Back</button>
-                $$pageTitle
+                <span>$$componentName</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" alt="Edit" data-local-action="editName">
             </div>
         </div>
         <div class="editor-container">
             <div class="tabs-header">
                 <div class="tabs-list">
-                    <div class="tab tab-html active" data-local-action="changeTab html">HTML</div>
-                    <div class="tab tab-css" data-local-action="changeTab css">CSS</div>
-                    <div class="tab tab-js" data-local-action="changeTab js">JS</div>
+                    <div class="tab html-editor active" data-local-action="changeTab html-editor">HTML</div>
+                    <div class="tab css-editor" data-local-action="changeTab css-editor">CSS</div>
+                    <div class="tab js-editor" data-local-action="changeTab js-editor">JS</div>
                 </div>
             </div>
             <div class="tab-content">

@@ -1,63 +1,39 @@
 const CodeManager = assistOS.loadModule("codemanager", {});
 
 export class AchillesIdeCodeEdit {
-    constructor(element, invalidate) {
+    constructor(element, invalidate, props) {
         this.element = element;
         this.invalidate = invalidate;
-        this.context = JSON.parse(decodeURIComponent(this.element.getAttribute("data-context")));
-
+        this.context = props.context;
+        this.element.classList.add(`${props.type}-editor`);
         this.state = {
-            editorContent: this.element.getAttribute("data-editor-content") ? decodeURIComponent(this.element.getAttribute("data-editor-content")) : "",
-            loading: false,
+            editorContent: props.content || "",
             fileType: this.context.fileType || "js"
         };
-
-        this.invalidate(async () => {
-            await this.initializeEditorState();
-        });
+        this.invalidate();
     }
 
     async initializeEditorState() {
-
         this.state.fileName = `${this.context.fileName}`;
-
         try {
             this.state.editorContent = await CodeManager.getCode(assistOS.space.id, this.state.fileName);
         } catch (e) {
             console.info(`No file found for context "${this.context.fileName}". Starting with a blank template.`);
         }
         this.state.editorContent = this.state.editorContent || `// Blank template for ${this.context.fileName}\n\nexport class ${this.context.fileName.replace(/\s/g, '')} {\n    constructor() {\n        console.log("Hello from ${this.context.fileName}");\n    }\n}\n`;
-
-        this.state.loading = false;
-
     }
 
-    beforeRender() {
-        this.renderSingleFileEditor();
-    }
-
-    setFileName() {
-        if (this.context.singleFile) {
-            this.element.querySelector('.page-header .left-header').innerHTML = `<span> Editing: ${this.state.fileName}.${this.state.fileType}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" data-local-action="editName">`;
-        }
-    }
-
-    renderSingleFileEditor() {
-        this.itemList = "";
-        let footer = this.context.singleFile ? `<div class="editor-footer">
-                    <button class="general-button" data-local-action="saveCode">Save</button>
-            </div>` : "";
+    async beforeRender() {
+        await this.initializeEditorState();
         this.editor = `
             <div class="editor-wrapper">
                 <textarea class="code-input" file-type="${this.state.fileType}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
                 <pre class="code-output" aria-hidden="true"><code class="language-${this.state.fileType}"></code></pre>
             </div>
-            ${footer}
         `;
     }
 
     afterRender() {
-        this.setFileName();
         this.textarea = this.element.querySelector('.code-input');
         this.codeBlock = this.element.querySelector('.code-output code');
 
@@ -244,14 +220,6 @@ export class AchillesIdeCodeEdit {
         target.scrollLeft = source.scrollLeft;
     }
 
-    editName() {
-        this.element.querySelector('.page-header .left-header').innerHTML = `<input class="title-input" type="text" value="${this.state.fileName}"/>`;
-
-        this.element.querySelector('.title-input')?.focus();
-        this.element.querySelector('.title-input')?.addEventListener('keydown', this.saveName.bind(this));
-        this.element.querySelector('.title-input')?.addEventListener('blur', this.saveName.bind(this));
-    }
-
     async saveName(event) {
         if (event.key === 'Enter' || event.type === 'blur') {
             const newName = event.target.value.replace(/[^a-zA-Z0-9]/g, '-');
@@ -269,15 +237,11 @@ export class AchillesIdeCodeEdit {
                 }
                 this.syncHighlight();
             }
-            //this.setFileName();
             this.invalidate();
         }
     }
 
-    async saveCode() {
-        if (!this.state.fileName) return;
-        const folder = this.context.singleFile ? `${this.context.appName}/${this.context.folder}` : `${this.context.appName}/${this.context.folder}/${this.state.fileName}`;
-        await CodeManager.saveCode(assistOS.space.id, `${folder}`, `${this.state.fileName}.${this.state.fileType}`, this.state.editorContent);
-        assistOS.showToast("Code saved successfully!", "success");
+    getCode(){
+        return this.state.editorContent;
     }
 }

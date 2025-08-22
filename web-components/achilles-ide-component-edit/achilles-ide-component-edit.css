@@ -103,11 +103,11 @@
     overflow: auto;
 }
 
-.tab-content .editor-content {
+.tab-content achilles-ide-code-edit{
     display: none;
 }
 
-.tab-content .editor-content.active {
+.tab-content achilles-ide-code-edit.active {
     display: block;
 }
 
