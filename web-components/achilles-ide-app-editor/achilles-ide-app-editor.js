@@ -32,7 +32,7 @@ export class AchillesIdeAppEditor {
             },
             backend: {
                 name: "Backend Plugins",
-                editPage: "achilles-ide-backend-plugins",
+                editPage: "achilles-ide-backend-plugin-edit",
                 listFn: "listBackendPluginsForApp",
                 scriptName: "BackendPluginVibe",
                 collapsed: false,
@@ -40,7 +40,7 @@ export class AchillesIdeAppEditor {
             },
             document: {
                 name: "Document Plugins",
-                editPage: "achilles-ide-doc-plugins",
+                editPage: "achilles-ide-document-plugin-edit",
                 scriptName: "DocumentPluginVibe",
                 collapsed: false,
                 items: []
@@ -146,32 +146,23 @@ export class AchillesIdeAppEditor {
     }
 
     async deleteItem(target, sectionType, itemName) {
-        // Prevent event bubbling
-        if (target && target.stopPropagation) {
-            target.stopPropagation();
-        }
-        
         const section = this.sections[sectionType];
         if (!section) return;
         
-        const confirmed = await assistOS.UI.showModal("confirm", {
-            title: "Delete Item",
-            message: `Are you sure you want to delete "${itemName}"?`,
-            confirmButtonText: "Delete",
-            cancelButtonText: "Cancel"
-        });
+        const confirmed = await assistOS.UI.showModal("confirm-action-modal", {
+            message: `Are you sure you want to delete ${itemName}?`,
+        }, true);
         
         if (confirmed) {
             try {
                 // Call appropriate delete function based on section type
-                if (sectionType === 'webskel' && codeManager.deleteComponent) {
+                if (sectionType === 'webskel') {
                     await codeManager.deleteComponent(assistOS.space.id, this.appName, itemName);
-                } else if (sectionType === 'backend' && codeManager.deleteBackendPlugin) {
+                } else if (sectionType === 'backend') {
                     await codeManager.deleteBackendPlugin(assistOS.space.id, this.appName, itemName);
-                } else if (sectionType === 'document' && codeManager.deleteDocumentPlugin) {
+                } else if (sectionType === 'document') {
                     await codeManager.deleteDocumentPlugin(assistOS.space.id, this.appName, itemName);
                 }
-                
                 assistOS.showToast(`${itemName} deleted successfully`, "success");
                 
                 // Reload section items
