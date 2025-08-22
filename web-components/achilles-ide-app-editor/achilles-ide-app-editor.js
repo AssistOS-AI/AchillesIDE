@@ -1,0 +1,203 @@
+import manager from "../../manager.js"
+
+const codeManager = assistOS.loadModule("codemanager");
+const chatModule = assistOS.loadModule("chat");
+const webAssistantModule = assistOS.loadModule("webassistant");
+
+export class AchillesIdeAppEditor {
+    constructor(element, invalidate) {
+        this.element = element;
+        this.invalidate = invalidate;
+        
+        // Extract app name from URL or receive via data attribute
+        let urlParts = window.location.hash.split("/");
+        this.appName = decodeURIComponent(urlParts[urlParts.length - 1]);
+        
+        this.sections = {
+            webskel: {
+                name: "WebSkel Components",
+                editPage: "achilles-ide-component-edit",
+                listFn: "listComponentsForApp",
+                scriptName: "WebSkelVibe",
+                collapsed: false,
+                items: []
+            },
+            persisto: {
+                name: "Persisto",
+                editPage: "achilles-ide-persisto",
+                listFn: "getAppPersistoConfig",
+                scriptName: "PersistoVibe",
+                collapsed: false,
+                items: []
+            },
+            backend: {
+                name: "Backend Plugins",
+                editPage: "achilles-ide-backend-plugins",
+                listFn: "listBackendPluginsForApp",
+                scriptName: "BackendPluginVibe",
+                collapsed: false,
+                items: []
+            },
+            document: {
+                name: "Document Plugins",
+                editPage: "achilles-ide-doc-plugins",
+                scriptName: "DocumentPluginVibe",
+                collapsed: false,
+                items: []
+            }
+        };
+        
+        this.invalidate();
+    }
+
+    async beforeRender() {
+        this.appTitle = this.appName;
+        
+        // Load items for each section
+        await this.loadSectionItems();
+        
+        // Render items HTML for each section
+        this.webSkelItems = this.renderItemsList(this.sections.webskel.items, "webskel");
+        this.persistoItems = this.renderItemsList(this.sections.persisto.items, "persisto");
+        this.backendPluginItems = this.renderItemsList(this.sections.backend.items, "backend");
+        this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
+    }
+
+    async afterRender() {
+        // Apply collapsed state to sections
+        Object.keys(this.sections).forEach(sectionKey => {
+            if (this.sections[sectionKey].collapsed) {
+                const sectionElement = this.element.querySelector(`[data-section="${sectionKey}"]`);
+                if (sectionElement) {
+                    sectionElement.classList.add('collapsed');
+                }
+            }
+        });
+    }
+
+    async loadSectionItems() {
+        for (const [sectionKey, section] of Object.entries(this.sections)) {
+            if (typeof codeManager[section.listFn] === 'function') {
+                try {
+                    const items = await codeManager[section.listFn](assistOS.space.id, this.appName);
+                    section.items = Array.isArray(items) ? items : [];
+                } catch (error) {
+                    console.error(`Error loading ${section.name}:`, error);
+                    section.items = [];
+                }
+            } else if (section.listFn) {
+                console.warn(`Function ${section.listFn} not found in codeManager`);
+                section.items = [];
+            }
+        }
+    }
+
+    renderItemsList(items, sectionType) {
+        if (!items || items.length === 0) {
+            return `
+                <div class="empty-state">
+                    <img src="./wallet/assets/icons/empty.svg" alt="empty">
+                    <p>No items yet</p>
+                </div>
+            `;
+        }
+        
+        return items.map(item => {
+            const itemName = typeof item === 'string' ? item : item.name;
+            return `
+                <div class="item-card" data-local-action="openItem ${sectionType} ${itemName}">
+                    <span class="item-name">${itemName}</span>
+                    <div class="item-actions">
+                        <button class="action-button" data-local-action="editItem ${sectionType} ${itemName}">
+                            <img src="./wallet/assets/icons/edit.svg" alt="edit">
+                        </button>
+                        <button class="action-button" data-local-action="deleteItem ${sectionType} ${itemName}">
+                            <img src="./wallet/assets/icons/delete.svg" alt="delete">
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    toggleSection(target, sectionKey) {
+        const sectionElement = this.element.querySelector(`[data-section="${sectionKey}"]`);
+        if (sectionElement) {
+            sectionElement.classList.toggle('collapsed');
+            this.sections[sectionKey].collapsed = !this.sections[sectionKey].collapsed;
+        }
+    }
+
+    async openItem(target, sectionType, itemName) {
+        const section = this.sections[sectionType];
+        if (!section) return;
+        
+        const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${section.editPage}/${encodeURIComponent(itemName)}`;
+        await manager.navigateInternal("achilles-ide-chat-page", url);
+    }
+
+    async editItem(target, sectionType, itemName) {
+        // Prevent event bubbling to openItem
+        if (target && target.stopPropagation) {
+            target.stopPropagation();
+        }
+        
+        await this.openItem(null, sectionType, itemName);
+    }
+
+    async deleteItem(target, sectionType, itemName) {
+        // Prevent event bubbling
+        if (target && target.stopPropagation) {
+            target.stopPropagation();
+        }
+        
+        const section = this.sections[sectionType];
+        if (!section) return;
+        
+        const confirmed = await assistOS.UI.showModal("confirm", {
+            title: "Delete Item",
+            message: `Are you sure you want to delete "${itemName}"?`,
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel"
+        });
+        
+        if (confirmed) {
+            try {
+                // Call appropriate delete function based on section type
+                if (sectionType === 'webskel' && codeManager.deleteComponent) {
+                    await codeManager.deleteComponent(assistOS.space.id, this.appName, itemName);
+                } else if (sectionType === 'backend' && codeManager.deleteBackendPlugin) {
+                    await codeManager.deleteBackendPlugin(assistOS.space.id, this.appName, itemName);
+                } else if (sectionType === 'document' && codeManager.deleteDocumentPlugin) {
+                    await codeManager.deleteDocumentPlugin(assistOS.space.id, this.appName, itemName);
+                }
+                
+                assistOS.showToast(`${itemName} deleted successfully`, "success");
+                
+                // Reload section items
+                await this.loadSectionItems();
+                this.invalidate();
+            } catch (error) {
+                console.error(`Error deleting ${itemName}:`, error);
+                assistOS.showToast(`Failed to delete ${itemName}`, "error");
+            }
+        }
+    }
+
+    async addItem(target, sectionType) {
+        const section = this.sections[sectionType];
+        if (!section) return;
+        
+        const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${section.editPage}`;
+        await manager.navigateInternal("achilles-ide-chat-page", url);
+    }
+
+    async editPersisto() {
+        const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/achilles-ide-persisto`;
+        await manager.navigateInternal("achilles-ide-chat-page", url);
+    }
+
+    async goBack() {
+        await manager.navigateInternal("achilles-ide-landing", "achilles-ide-landing");
+    }
+}

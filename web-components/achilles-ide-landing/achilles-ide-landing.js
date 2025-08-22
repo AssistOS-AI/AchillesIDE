@@ -7,12 +7,6 @@ export class AchillesIdeLanding {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
-        this.appPages = [
-            {name: "WebSkel Components", component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
-            {name: "Persisto", component: "achilles-ide-persisto", scriptName:"PersistoVibe"},
-            {name: "Backend Plugins", component: "achilles-ide-backend-plugins", scriptName:"BackendPluginVibe"},
-            {name: "Document Plugins", component: "achilles-ide-doc-plugins", scriptName: "DocumentPluginVibe"}
-        ];
         this.invalidate();
     }
 
@@ -22,14 +16,9 @@ export class AchillesIdeLanding {
         for(let appName of apps){
             this.appsList += `<div class="app-item" data-local-action="openAppEditor ${appName}">${appName}</div>`;
         }
-        this.pagesList = "";
-        for (const page of this.appPages) {
-            this.pagesList += `<div class="context-item" data-local-action="openEditPage ${page.component}">${page.name}</div>`;
-        }
     }
 
     async afterRender() {
-
     }
     getChatId(appName, pageName){
         return  appName + `_${pageName}` + "_Chat";
@@ -44,23 +33,14 @@ export class AchillesIdeLanding {
         this.appName = appName;
         await codeManager.createApp(assistOS.space.id, appName);
         assistOS.showToast("App created!", "success");
-        this.element.querySelector(".new-application-section").style.display = "none";
-        this.element.querySelector(".context-section").style.display = "block";
         for(let appPage of this.appPages){
-            let chatId = this.getChatId(appName, appPage.component);
+            let chatId = this.getChatId(appName, appPage.editPage);
             await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
             appPage.chatId = chatId;
         }
+        await this.openAppEditor(null, appName);
     }
-    openAppEditor(target, appName){
-        this.appName = appName;
-        let sectionHeader = this.element.querySelector(".app-name");
-        sectionHeader.innerHTML = appName;
-        this.element.querySelector(".new-application-section").style.display = "none";
-        this.element.querySelector(".context-section").style.display = "block";
-    }
-    async openEditPage(target, pageName){
-        await manager.navigateInternal("achilles-ide-chat-page", `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${pageName}`);
+    async openAppEditor(target, appName){
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(appName)}`);
     }
 }
-  

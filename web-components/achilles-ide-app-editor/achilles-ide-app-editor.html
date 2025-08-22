@@ -1,0 +1,91 @@
+<div class="achilles-ide-app-editor">
+    <div class="app-editor-header">
+        <button class="back-button" data-local-action="goBack" title="Back to Applications">
+            <img src="./wallet/assets/icons/back.svg" alt="back">
+            <span>Back</span>
+        </button>
+        <h2 class="app-title">$$appTitle</h2>
+        <div class="header-spacer"></div>
+    </div>
+    
+    <div class="tower-container">
+        <div class="tower-scroll">
+            <!-- WebSkel Components Section -->
+            <div class="tower-section" data-section="webskel">
+                <div class="section-header" data-local-action="toggleSection webskel">
+                    <div class="section-title">
+                        <img class="section-icon" src="./wallet/assets/icons/component.svg" alt="components">
+                        <span>WebSkel Components</span>
+                    </div>
+                    <img class="toggle-arrow" src="./wallet/assets/icons/arrow.svg" alt="toggle">
+                </div>
+                <div class="section-content">
+                    <div class="items-list">
+                        $$webSkelItems
+                    </div>
+                    <button class="add-button" data-local-action="addItem webskel">
+                        <span>+ Add Component</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Persisto Section -->
+            <div class="tower-section" data-section="persisto">
+                <div class="section-header" data-local-action="toggleSection persisto">
+                    <div class="section-title">
+                        <img class="section-icon" src="./wallet/assets/icons/config.svg" alt="config">
+                        <span>Persisto Configuration</span>
+                    </div>
+                    <img class="toggle-arrow" src="./wallet/assets/icons/arrow.svg" alt="toggle">
+                </div>
+                <div class="section-content">
+                    <div class="items-list">
+                        $$persistoItems
+                    </div>
+                    <button class="add-button" data-local-action="editPersisto">
+                        <span>Edit Configuration</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Backend Plugins Section -->
+            <div class="tower-section" data-section="backend">
+                <div class="section-header" data-local-action="toggleSection backend">
+                    <div class="section-title">
+                        <img class="section-icon" src="./wallet/assets/icons/plugin.svg" alt="backend">
+                        <span>Backend Plugins</span>
+                    </div>
+                    <img class="toggle-arrow" src="./wallet/assets/icons/arrow.svg" alt="toggle">
+                </div>
+                <div class="section-content">
+                    <div class="items-list">
+                        $$backendPluginItems
+                    </div>
+                    <button class="add-button" data-local-action="addItem backend">
+                        <span>+ Add Plugin</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Document Plugins Section -->
+            <div class="tower-section" data-section="document">
+                <div class="section-header" data-local-action="toggleSection document">
+                    <div class="section-title">
+                        <img class="section-icon" src="./wallet/assets/icons/document.svg" alt="document">
+                        <span>Document Plugins</span>
+                    </div>
+                    <img class="toggle-arrow" src="./wallet/assets/icons/arrow.svg" alt="toggle">
+                </div>
+                <div class="section-content">
+                    <div class="items-list">
+                        $$documentPluginItems
+                    </div>
+                    <button class="add-button" data-local-action="addItem document">
+                        <span>+ Add Plugin</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

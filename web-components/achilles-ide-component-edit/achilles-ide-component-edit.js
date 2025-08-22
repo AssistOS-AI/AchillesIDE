@@ -1,4 +1,6 @@
 import {getTemplate} from "../../utils/code-templates-utils.js";
+import manager from "../../manager.js"
+
 const codeManager = assistOS.loadModule("codemanager");
 export class AchillesIdeComponentEdit {
     constructor(element, invalidate) {
@@ -22,7 +24,7 @@ export class AchillesIdeComponentEdit {
 
     renderWebSkelEditor() {
         this.itemList = ""; // No sidebar
-        this.pageTitle = `<span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" data-local-action="editName">`;
+        this.pageTitle = `<span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" alt="Edit" data-local-action="editName">`;
         this.state.html = getTemplate("html", this.state.fileName);
         this.state.css = getTemplate("css", this.state.fileName);
         this.state.js = getTemplate("js", this.state.fileName);
@@ -53,7 +55,9 @@ export class AchillesIdeComponentEdit {
     }
 
     editName() {
-        this.element.querySelector('.page-header .left-header').innerHTML = `<input class="title-input" type="text" value="${this.state.fileName}"/>`;
+        this.element.querySelector('.page-header .left-header').innerHTML = `
+        <button class="back-button" data-local-action="navigateBack">← Back</button>
+        <input class="title-input" type="text" value="${this.state.fileName}"/>`;
         this.element.querySelector('.title-input')?.focus();
         this.element.querySelector('.title-input')?.addEventListener('keydown', this.saveName.bind(this));
         this.element.querySelector('.title-input')?.addEventListener('blur', this.saveName.bind(this));
@@ -69,8 +73,7 @@ export class AchillesIdeComponentEdit {
                 element.webSkelPresenter.saveName(event);
             });
             this.state.fileName = event.target.value;
-            this.element.querySelector('.page-header .left-header').innerHTML = `<span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" data-local-action="editName">`;
-
+            this.element.querySelector('.page-header .left-header').innerHTML = `<button class="back-button" data-local-action="navigateBack">← Back</button><span>${this.state.fileName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" alt="Edit" data-local-action="editName">`;
         }
 
     }
@@ -82,13 +85,11 @@ export class AchillesIdeComponentEdit {
         }
     }
 
+    async navigateBack() {
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}`)
+    }
+
     async beforeRender() {
-        let components = await codeManager.listComponentsForApp(assistOS.space.id, this.appName);
-        let componentsHTML = "";
-        for(let componentName of components){
-            componentsHTML += `<div class="component-name" data-local-action="editComponent ${componentName}">${componentName}</div>`
-        }
-        this.componentsList = componentsHTML;
         this.renderWebSkelEditor();
         this.state.editorContent = this.state.html;
         this.state.loading = false;

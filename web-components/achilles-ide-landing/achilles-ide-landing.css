@@ -70,19 +70,60 @@
     gap: 1rem;
     margin-top: 1rem;
 }
-
-.context-item {
-    padding: 1.5rem;
+.context-dropdown {
+    position: relative;
     border: 1px solid var(--light-gray-border);
     border-radius: 8px;
+    background-color: #fff;
+}
+
+.context-dropdown-header {
+    padding: 1.5rem;
     cursor: pointer;
     text-align: center;
     font-size: 1.1rem;
-    transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
 }
 
-.context-item:hover {
+.context-dropdown-header:hover {
     background-color: var(--option-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.context-dropdown-header .arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.context-dropdown.open .arrow {
+    transform: rotate(180deg);
+}
+
+.context-dropdown-content {
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid var(--light-gray-border);
+}
+
+.context-dropdown.open .context-dropdown-content {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-top: 1px solid var(--light-gray-border);
+}
+
+.dropdown-item:hover {
+    background-color: var(--option-hover);
+}
+
+.add-item {
+    font-weight: bold;
+    color: var(--color-accent);
 }
