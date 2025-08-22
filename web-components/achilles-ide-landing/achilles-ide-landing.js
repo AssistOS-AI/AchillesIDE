@@ -33,8 +33,14 @@ export class AchillesIdeLanding {
         this.appName = appName;
         await codeManager.createApp(assistOS.space.id, appName);
         assistOS.showToast("App created!", "success");
+        this.appPages = [
+            {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
+            {component: "achilles-ide-persisto", scriptName:"PersistoVibe"},
+            {component: "achilles-ide-backend-plugins", scriptName:"BackendPluginVibe"},
+            {component: "achilles-ide-doc-plugins", scriptName: "DocumentPluginVibe"}
+        ];
         for(let appPage of this.appPages){
-            let chatId = this.getChatId(appName, appPage.editPage);
+            let chatId = this.getChatId(appName, appPage.component);
             await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
             appPage.chatId = chatId;
         }

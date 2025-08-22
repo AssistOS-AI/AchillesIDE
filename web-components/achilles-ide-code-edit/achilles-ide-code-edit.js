@@ -1,5 +1,3 @@
-const CodeManager = assistOS.loadModule("codemanager", {});
-
 export class AchillesIdeCodeEdit {
     constructor(element, invalidate, props) {
         this.element = element;
@@ -15,11 +13,6 @@ export class AchillesIdeCodeEdit {
 
     async initializeEditorState() {
         this.state.fileName = `${this.context.fileName}`;
-        try {
-            this.state.editorContent = await CodeManager.getCode(assistOS.space.id, this.state.fileName);
-        } catch (e) {
-            console.info(`No file found for context "${this.context.fileName}". Starting with a blank template.`);
-        }
         this.state.editorContent = this.state.editorContent || `// Blank template for ${this.context.fileName}\n\nexport class ${this.context.fileName.replace(/\s/g, '')} {\n    constructor() {\n        console.log("Hello from ${this.context.fileName}");\n    }\n}\n`;
     }
 

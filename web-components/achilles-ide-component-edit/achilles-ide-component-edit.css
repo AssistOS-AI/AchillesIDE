@@ -21,6 +21,12 @@
     background: var(--hover-blue, #0056b3);
 }
 
+.name-edit-container {
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+}
+
 .title-input {
     font-size: inherit;
     font-weight: inherit;
@@ -28,6 +34,23 @@
     border-radius: 4px;
     padding: 4px 8px;
     color: var(--header-font-color);
+    transition: border-color 0.2s;
+}
+
+.title-input.invalid {
+    border: 2px solid #dc3545;
+    outline-color: #dc3545;
+}
+
+.error-message {
+    color: #d32f2f;
+    background-color: #ffebee;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ffcdd2;
 }
 
 .edit-icon {

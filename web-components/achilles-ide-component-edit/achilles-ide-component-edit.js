@@ -2,6 +2,7 @@ import {getTemplate} from "../../utils/code-templates-utils.js";
 import manager from "../../manager.js"
 
 const codeManager = assistOS.loadModule("codemanager");
+const BLANK = "blank-comp";
 export class AchillesIdeComponentEdit {
     constructor(element, invalidate) {
         this.element = element;
@@ -9,22 +10,24 @@ export class AchillesIdeComponentEdit {
         this.context = {};
         let urlParts = window.location.hash.split("/");
         this.appName = urlParts[3];
-        this.componentName = urlParts[5];
+        this.componentOldName = urlParts[5];
+        this.isNewComponent = !this.componentOldName; // Track if this is a new component
         this.invalidate();
     }
     async beforeRender() {
+        this.existingComponents = await codeManager.listComponentsForApp(assistOS.space.id, this.appName);
         let component = {};
-        if(this.componentName){
-            component = await codeManager.getComponent(assistOS.space.id, this.appName, this.componentName);
+        if(this.componentOldName){
+            component = await codeManager.getComponent(assistOS.space.id, this.appName, this.componentOldName);
         }
+        this.componentOldName = this.componentOldName || BLANK;
         this.state = {
-            componentName: this.componentName || "blank_",
+            componentName: this.componentOldName,
             activeTab: "html",
-            html: component.html || getTemplate("html", this.state.componentName),
-            css: component.css || getTemplate("css", this.state.componentName),
-            js: component.js || getTemplate("js", this.state.componentName),
+            html: component.html || getTemplate("html", BLANK),
+            css: component.css || getTemplate("css", BLANK),
+            js: component.js || getTemplate("js", BLANK),
         };
-        this.componentName = this.state.componentName;
     }
 
     async afterRender() {
@@ -69,23 +72,88 @@ export class AchillesIdeComponentEdit {
     editName() {
         this.element.querySelector('.page-header .left-header').innerHTML = `
         <button class="back-button" data-local-action="navigateBack">← Back</button>
-        <input class="title-input" type="text" value="${this.state.componentName}"/>`;
-        this.element.querySelector('.title-input')?.focus();
-        this.element.querySelector('.title-input')?.addEventListener('keydown', this.saveName.bind(this));
-        this.element.querySelector('.title-input')?.addEventListener('blur', this.saveName.bind(this));
+        <div class="name-edit-container">
+            <input class="title-input" type="text" value="${this.state.componentName}"/>
+            <span class="error-message" style="display: none;">Invalid web component name (must contain hyphen, lowercase, no spaces)</span>
+        </div>`;
+        const input = this.element.querySelector('.title-input');
+        input?.focus();
+        input?.addEventListener('input', this.validateComponentName.bind(this));
+        input?.addEventListener('keydown', this.saveName.bind(this));
+        input?.addEventListener('blur', this.saveName.bind(this));
+    }
+
+    validateComponentName(event) {
+        const input = event.target;
+        const errorMessage = this.element.querySelector('.error-message');
+        const newName = input.value;
+        
+        // Check if name is valid web component format
+        const isValidFormat = this.isValidWebComponentName(newName);
+        
+        // Check if name already exists (but allow keeping the current name)
+        const nameExists = this.existingComponents.includes(newName) && newName !== this.componentOldName;
+        
+        if (!isValidFormat) {
+            input.classList.add('invalid');
+            errorMessage.textContent = 'Invalid web component name (must contain hyphen, lowercase, no spaces)';
+            errorMessage.style.display = 'block';
+        } else if (nameExists) {
+            input.classList.add('invalid');
+            errorMessage.textContent = 'Component name already exists';
+            errorMessage.style.display = 'block';
+        } else {
+            input.classList.remove('invalid');
+            errorMessage.style.display = 'none';
+        }
+    }
+
+    isValidWebComponentName(name) {
+        // Custom element names must:
+        // - Contain a hyphen
+        // - Start with a lowercase letter
+        // - Only contain lowercase letters, numbers, hyphens
+        // - Not be a reserved name
+        const reservedNames = ['annotation-xml', 'color-profile', 'font-face', 'font-face-src', 
+                              'font-face-uri', 'font-face-format', 'font-face-name', 'missing-glyph'];
+        
+        if (!name || reservedNames.includes(name)) return false;
+        
+        const validPattern = /^[a-z]([a-z0-9-])*(-[a-z0-9]+)+$/;
+        return validPattern.test(name);
     }
 
     async saveName(event) {
         if (event.key === 'Enter' || event.type === 'blur') {
+            const newName = event.target.value;
+            
+            // Check if name is valid format
+            const isValidFormat = this.isValidWebComponentName(newName);
+            // Check if name already exists (but allow keeping the current name)
+            const nameExists = this.existingComponents.includes(newName) && newName !== this.componentOldName;
+            
+            // Only save if the name is valid and doesn't exist
+            if (!isValidFormat || nameExists) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    return;
+                }
+                // On blur, revert to original name if invalid or exists
+                if (event.type === 'blur') {
+                    event.target.value = this.state.componentName;
+                    this.element.querySelector('.page-header .left-header').innerHTML = `<button class="back-button" data-local-action="navigateBack">← Back</button><span>${this.state.componentName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" alt="Edit" data-local-action="editName">`;
+                }
+                return;
+            }
+            
             // Update child achilles-ide-code-edit components with new file name
             const codeEditElements = this.element.querySelectorAll('achilles-ide-code-edit');
             codeEditElements.forEach(element => {
                 element.webSkelPresenter.saveName(event);
             });
-            this.state.componentName = event.target.value;
+            this.state.componentName = newName;
             this.element.querySelector('.page-header .left-header').innerHTML = `<button class="back-button" data-local-action="navigateBack">← Back</button><span>${this.state.componentName}</span> <img class="edit-icon" src="./wallet/assets/icons/edit.svg" alt="Edit" data-local-action="editName">`;
         }
-
     }
 
     async saveComponent() {
@@ -95,8 +163,15 @@ export class AchillesIdeComponentEdit {
         const htmlContent = html.webSkelPresenter.getCode();
         const cssContent = css.webSkelPresenter.getCode();
         const jsContent = js.webSkelPresenter.getCode();
-        await codeManager.saveComponent(assistOS.space.id, this.appName, this.state.componentName, htmlContent, cssContent, jsContent);
+        let renamed;
+        // Only set renamed if this is an existing component being renamed
+        // Don't set it for new components - they don't exist yet to be renamed
+        if(!this.isNewComponent && this.componentOldName !== this.state.componentName){
+            renamed = this.state.componentName;
+        }
+        await codeManager.saveComponent(assistOS.space.id, this.appName, this.componentOldName, htmlContent, cssContent, jsContent, renamed);
         await assistOS.showToast("Component saved!", "success");
+        this.isNewComponent = false;
     }
 
     async navigateBack() {
