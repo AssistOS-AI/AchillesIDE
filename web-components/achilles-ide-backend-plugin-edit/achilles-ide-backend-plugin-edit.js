@@ -1,7 +1,7 @@
 import manager from "../../manager.js"
 
 const codeManager = assistOS.loadModule("codemanager");
-const BLANK = "blank-backend-plugin";
+const BLANK = "BackendPlugin";
 
 export class AchillesIdeBackendPluginEdit {
     constructor(element, invalidate) {
@@ -17,14 +17,14 @@ export class AchillesIdeBackendPluginEdit {
 
     async beforeRender() {
         this.existingBackendPlugins = await codeManager.listBackendPluginsForApp(assistOS.space.id, this.appName);
-        let backendPlugin = {};
+        let backendPlugin;
         if(this.backendPluginOldName){
             backendPlugin = await codeManager.getBackendPlugin(assistOS.space.id, this.appName, this.backendPluginOldName);
         }
         this.backendPluginOldName = this.backendPluginOldName || BLANK;
         this.state = {
             backendPluginName: this.backendPluginOldName,
-            content: backendPlugin.content || this.getDefaultBackendPluginTemplate()
+            content: backendPlugin || this.getDefaultBackendPluginTemplate()
         };
     }
 
@@ -95,7 +95,7 @@ module.exports = {
         
         if (!isValidFormat) {
             input.classList.add('invalid');
-            errorMessage.textContent = 'Invalid backend plugin name (use camelCase or snake_case)';
+            errorMessage.textContent = 'Invalid backend plugin name (must be PascalCase)';
             errorMessage.style.display = 'block';
         } else if (nameExists) {
             input.classList.add('invalid');
@@ -108,10 +108,10 @@ module.exports = {
     }
 
     isValidBackendPluginName(name) {
-        // Plugin names should follow JavaScript naming conventions
+        // Plugin names should follow PascalCase naming convention
         if (!name || name.trim() === '') return false;
-        // Allow camelCase, PascalCase, snake_case, and kebab-case
-        const validPattern = /^[a-zA-Z][a-zA-Z0-9_-]*$/;
+        // Allow PascalCase
+        const validPattern = /^[A-Z][a-zA-Z0-9]*$/;
         return validPattern.test(name);
     }
 

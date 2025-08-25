@@ -2,7 +2,6 @@ import manager from "../../manager.js"
 
 const codeManager = assistOS.loadModule("codemanager");
 const chatModule = assistOS.loadModule("chat");
-const webAssistantModule = assistOS.loadModule("webassistant");
 
 export class AchillesIdeAppEditor {
     constructor(element, invalidate) {
@@ -19,14 +18,6 @@ export class AchillesIdeAppEditor {
                 editPage: "achilles-ide-component-edit",
                 listFn: "listComponentsForApp",
                 scriptName: "WebSkelVibe",
-                collapsed: false,
-                items: []
-            },
-            persisto: {
-                name: "Persisto",
-                editPage: "achilles-ide-persisto",
-                listFn: "getAppPersistoConfig",
-                scriptName: "PersistoVibe",
                 collapsed: false,
                 items: []
             },
@@ -58,7 +49,6 @@ export class AchillesIdeAppEditor {
         
         // Render items HTML for each section
         this.webSkelItems = this.renderItemsList(this.sections.webskel.items, "webskel");
-        this.persistoItems = this.renderItemsList(this.sections.persisto.items, "persisto");
         this.backendPluginItems = this.renderItemsList(this.sections.backend.items, "backend");
         this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
     }
@@ -180,11 +170,6 @@ export class AchillesIdeAppEditor {
         if (!section) return;
         
         const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${section.editPage}`;
-        await manager.navigateInternal("achilles-ide-chat-page", url);
-    }
-
-    async editPersisto() {
-        const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/achilles-ide-persisto`;
         await manager.navigateInternal("achilles-ide-chat-page", url);
     }
 

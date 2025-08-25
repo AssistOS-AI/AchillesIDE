@@ -22,8 +22,9 @@ achilles-ide-code-edit {
 .editor-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex-grow: 1; /* Allow the container to fill available vertical space */
     width: 100%;
+    min-height: 0; /* This is crucial for making flex children scrollable */
 }
 
 .tab-content {
