@@ -54,8 +54,9 @@ export class AchillesIdeLanding {
             return;
         }
         assistOS.space.applications = await applicationModule.getApplications(assistOS.space.id);
-        let sidebar = document.querySelector("left-sidedar");
+        let sidebar = document.querySelector("left-sidebar");
         sidebar.webSkelPresenter.invalidate();
+        await assistOS.UI.reinit(`/spaces/webSkel-config`);
         assistOS.showToast("App created!", "success");
         this.appPages = [
             {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
@@ -86,7 +87,7 @@ export class AchillesIdeLanding {
             try {
                 await codeManager.deleteApp(assistOS.space.id, appName);
                 assistOS.space.applications = assistOS.space.applications.filter(app => app.name !== appName);
-                let sidebar = document.querySelector("left-sidedar");
+                let sidebar = document.querySelector("left-sidebar");
                 sidebar.webSkelPresenter.invalidate();
                 assistOS.showToast("Application deleted successfully!", "success");
                 this.invalidate();

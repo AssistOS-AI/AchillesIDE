@@ -187,3 +187,43 @@
     margin-bottom: 1rem;
     opacity: 0.5;
 }
+
+.settings-section {
+    padding: 1rem;
+    max-width: 800px;
+}
+
+.settings-section .form-item {
+    margin-bottom: 1.5rem;
+}
+
+.settings-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.readme-editor {
+    width: 100%;
+    min-height: 300px;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 1rem;
+    border: 1px solid var(--light-gray-border);
+    border-radius: 6px;
+    resize: none;
+}
+
+.repository-container {
+    margin-top: 1.5rem;
+}
+
+.repository-link {
+    color: var(--strong-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.repository-link:hover {
+    text-decoration: underline;
+}

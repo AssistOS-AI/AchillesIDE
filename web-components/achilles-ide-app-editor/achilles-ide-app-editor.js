@@ -1,7 +1,7 @@
 import manager from "../../manager.js"
 
 const codeManager = assistOS.loadModule("codemanager");
-const chatModule = assistOS.loadModule("chat");
+const applicationModule = assistOS.loadModule("application");
 
 export class AchillesIdeAppEditor {
     constructor(element, invalidate) {
@@ -13,6 +13,9 @@ export class AchillesIdeAppEditor {
         this.appName = decodeURIComponent(urlParts[urlParts.length - 1]);
         
         this.sections = {
+            settings: {
+                name: "Settings"
+            },
             webskel: {
                 name: "WebSkel Components",
                 editPage: "achilles-ide-component-edit",
@@ -36,13 +39,17 @@ export class AchillesIdeAppEditor {
         };
         
         // Set default active section
-        this.activeSection = 'webskel';
+        this.activeSection = 'settings';
         
         this.invalidate();
     }
 
     async beforeRender() {
         this.appTitle = this.appName;
+        let appManifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
+        // Mock data for settings page
+        this.readmeContent = `# ${this.appName}\n\nThis is a sample README file for the application. You can edit this content.`;
+        this.repositoryUrl = appManifest.repository;
         
         // Load items for each section
         await this.loadSectionItems();
@@ -53,11 +60,13 @@ export class AchillesIdeAppEditor {
         this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
         
         // Set active classes for menu and content
+        this.settingsActive = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelActive = this.activeSection === 'webskel' ? 'active' : '';
         this.backendActive = this.activeSection === 'backend' ? 'active' : '';
         this.documentActive = this.activeSection === 'document' ? 'active' : '';
         
         // Set display classes for content sections
+        this.settingsDisplay = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelDisplay = this.activeSection === 'webskel' ? 'active' : '';
         this.backendDisplay = this.activeSection === 'backend' ? 'active' : '';
         this.documentDisplay = this.activeSection === 'document' ? 'active' : '';
@@ -69,6 +78,7 @@ export class AchillesIdeAppEditor {
 
     async loadSectionItems() {
         for (const [sectionKey, section] of Object.entries(this.sections)) {
+            if (sectionKey === 'settings') continue;
             if (typeof codeManager[section.listFn] === 'function') {
                 try {
                     const items = await codeManager[section.listFn](assistOS.space.id, this.appName);
@@ -196,5 +206,14 @@ export class AchillesIdeAppEditor {
 
     async openCommitModal() {
         await assistOS.UI.showModal("achilles-ide-commit-modal", { appName: this.appName });
+    }
+
+    async saveReadme() {
+        const readmeContent = this.element.querySelector('#readme-content').value;
+        // In a real implementation, this would call a service to save the file
+        // For now, we just log it and show a toast.
+        console.log("Saving README.md:", readmeContent);
+        assistOS.UI.showToast("README.md saved successfully!", "success");
+        this.readmeContent = readmeContent; // Update local state for mock persistence
     }
 }

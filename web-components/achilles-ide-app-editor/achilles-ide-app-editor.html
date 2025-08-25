@@ -10,11 +10,29 @@
     </div>
     <div class="app-editor-body">
         <div class="editor-menu">
+            <div class="menu-item $$settingsActive" data-local-action="selectSection settings">Settings</div>
             <div class="menu-item $$webSkelActive" data-local-action="selectSection webskel">WebSkel Components</div>
             <div class="menu-item $$backendActive" data-local-action="selectSection backend">Backend Plugins</div>
             <div class="menu-item $$documentActive" data-local-action="selectSection document">Document Plugins</div>
         </div>
         <div class="editor-content">
+            <div class="content-section $$settingsDisplay" data-section="settings">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-section">
+                    <div class="form-item">
+                        <label for="readme-content">README.md</label>
+                        <textarea id="readme-content" class="form-input readme-editor">$$readmeContent</textarea>
+                    </div>
+                    <button class="general-button" data-local-action="saveReadme">Save README</button>
+
+                    <div class="form-item repository-container">
+                        <label>Repository</label>
+                        <a href="$$repositoryUrl" target="_blank" rel="noopener noreferrer" class="repository-link">$$repositoryUrl</a>
+                    </div>
+                </div>
+            </div>
             <div class="content-section $$webSkelDisplay" data-section="webskel">
                 <div class="section-header">
                     <h2>WebSkel Components</h2>
