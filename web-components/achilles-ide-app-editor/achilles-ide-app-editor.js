@@ -18,7 +18,6 @@ export class AchillesIdeAppEditor {
                 editPage: "achilles-ide-component-edit",
                 listFn: "listComponentsForApp",
                 scriptName: "WebSkelVibe",
-                collapsed: false,
                 items: []
             },
             backend: {
@@ -26,17 +25,18 @@ export class AchillesIdeAppEditor {
                 editPage: "achilles-ide-backend-plugin-edit",
                 listFn: "listBackendPluginsForApp",
                 scriptName: "BackendPluginVibe",
-                collapsed: false,
                 items: []
             },
             document: {
                 name: "Document Plugins",
                 editPage: "achilles-ide-document-plugin-edit",
                 scriptName: "DocumentPluginVibe",
-                collapsed: false,
                 items: []
             }
         };
+        
+        // Set default active section
+        this.activeSection = 'webskel';
         
         this.invalidate();
     }
@@ -51,18 +51,20 @@ export class AchillesIdeAppEditor {
         this.webSkelItems = this.renderItemsList(this.sections.webskel.items, "webskel");
         this.backendPluginItems = this.renderItemsList(this.sections.backend.items, "backend");
         this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
+        
+        // Set active classes for menu and content
+        this.webSkelActive = this.activeSection === 'webskel' ? 'active' : '';
+        this.backendActive = this.activeSection === 'backend' ? 'active' : '';
+        this.documentActive = this.activeSection === 'document' ? 'active' : '';
+        
+        // Set display classes for content sections
+        this.webSkelDisplay = this.activeSection === 'webskel' ? 'active' : '';
+        this.backendDisplay = this.activeSection === 'backend' ? 'active' : '';
+        this.documentDisplay = this.activeSection === 'document' ? 'active' : '';
     }
 
     async afterRender() {
-        // Apply collapsed state to sections
-        Object.keys(this.sections).forEach(sectionKey => {
-            if (this.sections[sectionKey].collapsed) {
-                const sectionElement = this.element.querySelector(`[data-section="${sectionKey}"]`);
-                if (sectionElement) {
-                    sectionElement.classList.add('collapsed');
-                }
-            }
-        });
+        // No need for collapsed state handling with new layout
     }
 
     async loadSectionItems() {
@@ -110,11 +112,26 @@ export class AchillesIdeAppEditor {
         }).join('');
     }
 
-    toggleSection(target, sectionKey) {
-        const sectionElement = this.element.querySelector(`[data-section="${sectionKey}"]`);
-        if (sectionElement) {
-            sectionElement.classList.toggle('collapsed');
-            this.sections[sectionKey].collapsed = !this.sections[sectionKey].collapsed;
+    selectSection(target, sectionKey) {
+        // Update active section
+        this.activeSection = sectionKey;
+        
+        // Update menu items
+        this.element.querySelectorAll('.menu-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        const activeMenuItem = this.element.querySelector(`.menu-item[data-local-action="selectSection ${sectionKey}"]`);
+        if (activeMenuItem) {
+            activeMenuItem.classList.add('active');
+        }
+        
+        // Update content sections
+        this.element.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        const activeSection = this.element.querySelector(`.content-section[data-section="${sectionKey}"]`);
+        if (activeSection) {
+            activeSection.classList.add('active');
         }
     }
 
