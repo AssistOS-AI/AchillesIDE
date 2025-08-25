@@ -37,6 +37,7 @@ export class AchillesIdeLanding {
         return  appName + `_${pageName}` + "_Chat";
     }
     async newApplication() {
+        assistOS.UI.showLoading();
         let webAssistant = await webAssistantModule.getWebAssistant(assistOS.space.id);
         const appName = this.element.querySelector("#applicationName").value;
         if (!appName.trim()) {
@@ -47,11 +48,14 @@ export class AchillesIdeLanding {
         try {
             await codeManager.createApp(assistOS.space.id, appName);
         } catch (e) {
+            assistOS.UI.hideLoading();
             console.error(e);
             await assistOS.showToast(`Failed to create app ${e.message}`, "error");
             return;
         }
         assistOS.space.applications = await applicationModule.getApplications(assistOS.space.id);
+        let sidebar = document.querySelector("left-sidedar");
+        sidebar.webSkelPresenter.invalidate();
         assistOS.showToast("App created!", "success");
         this.appPages = [
             {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
@@ -64,6 +68,7 @@ export class AchillesIdeLanding {
             await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
             appPage.chatId = chatId;
         }
+        assistOS.UI.hideLoading();
         await this.openAppEditor(null, appName);
     }
     async openAppEditor(target, appName){
@@ -81,6 +86,8 @@ export class AchillesIdeLanding {
             try {
                 await codeManager.deleteApp(assistOS.space.id, appName);
                 assistOS.space.applications = assistOS.space.applications.filter(app => app.name !== appName);
+                let sidebar = document.querySelector("left-sidedar");
+                sidebar.webSkelPresenter.invalidate();
                 assistOS.showToast("Application deleted successfully!", "success");
                 this.invalidate();
             } catch (e) {

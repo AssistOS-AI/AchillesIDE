@@ -193,4 +193,8 @@ export class AchillesIdeAppEditor {
     async goBack() {
         await manager.navigateInternal("achilles-ide-landing", "achilles-ide-landing");
     }
+
+    async openCommitModal() {
+        await assistOS.UI.showModal("achilles-ide-commit-modal", { appName: this.appName });
+    }
 }

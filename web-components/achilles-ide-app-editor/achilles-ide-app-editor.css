@@ -1,126 +1,84 @@
-.achilles-ide-app-editor {
+.app-editor-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    background-color: var(--application-marketplace-background);
-    position: relative;
+    height: 100%;
+    padding: 1.5rem;
 }
 
-/* Header */
 .app-editor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--page-padding);
-    background: var(--strong-blue);
-    color: var(--white);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--light-gray-border);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .back-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: var(--button-padding);
-    background: var(--gray-button-background);
-    border: 1px solid var(--gray-button-border);
-    border-radius: 5px;
-    color: var(--gray-button-text);
+    background: none;
+    border: 1px solid var(--light-gray-border);
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 400;
-    transition: all 0.2s ease;
+    font-size: 14px;
+    transition: background-color 0.2s;
 }
 
 .back-button:hover {
-    background: var(--action-button-background);
-    transform: translateX(-2px);
-}
-
-.back-button img {
-    width: 16px;
-    height: 16px;
-    opacity: 0.7;
+    background: var(--option-hover);
 }
 
 .app-title {
-    margin: 0;
-    font-size: var(--page-header-font-size);
+    font-size: 1.5rem;
     font-weight: 600;
-    text-align: center;
-    flex: 1;
+    margin: 0;
 }
 
-.header-spacer {
-    width: 100px;
-}
-
-/* Main Container */
-.main-container {
+.app-editor-body {
     display: flex;
-    flex: 1;
+    flex-grow: 1;
+    gap: 1.5rem;
     overflow: hidden;
 }
 
-/* Sidebar Menu */
-.sidebar-menu {
-    width: 250px;
-    background: var(--white);
-    border-right: 1px solid var(--light-gray-border);
-    padding: 1.5rem 0;
-    overflow-y: auto;
+.editor-menu {
     flex-shrink: 0;
+    width: 220px;
+    border-right: 1px solid var(--light-gray-border);
+    padding-right: 1.5rem;
 }
 
 .menu-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.875rem 1.5rem;
+    padding: 0.75rem 1rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
-    color: var(--default-font-color);
-    font-size: 0.95rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
     font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .menu-item:hover {
-    background: var(--option-hover);
-    border-left-color: var(--strong-blue);
+    background-color: var(--option-hover);
 }
 
 .menu-item.active {
-    background: var(--inactive-element);
-    border-left-color: var(--strong-blue);
-    color: var(--strong-blue);
+    background-color: var(--strong-blue);
+    color: white;
 }
 
-.menu-icon {
-    width: 20px;
-    height: 20px;
-    opacity: 0.6;
-}
-
-.menu-item.active .menu-icon {
-    opacity: 1;
-}
-
-/* Content Area */
-.content-area {
-    flex: 1;
-    padding: 2rem;
+.editor-content {
+    flex-grow: 1;
     overflow-y: auto;
-    background: var(--application-marketplace-background);
 }
 
-/* Content Sections */
 .content-section {
     display: none;
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow: hidden;
 }
 
 .content-section.active {
@@ -131,209 +89,101 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--light-gray-border);
-    background: var(--menu-backgroud);
+    margin-bottom: 1rem;
 }
 
-.section-title {
+.section-header h2 {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--header-font-color);
+    font-size: 1.2rem;
 }
 
-.section-body {
-    padding: 1.5rem;
+.add-button {
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
 }
 
-/* Items List */
+.add-button:hover {
+    background-color: var(--color-accent-hover);
+}
+
 .items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-height: calc(100vh - 300px);
-    overflow-y: auto;
-    padding-right: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
 }
 
-/* Custom Scrollbar for items list */
-.items-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.items-list::-webkit-scrollbar-track {
-    background: var(--light-gray-border);
-    border-radius: 3px;
-}
-
-.items-list::-webkit-scrollbar-thumb {
-    background: var(--form-input);
-    border-radius: 3px;
-}
-
-.items-list::-webkit-scrollbar-thumb:hover {
-    background: var(--default-font-color);
-}
-
-/* Item Cards */
 .item-card {
+    border: 1px solid var(--light-gray-border);
+    border-radius: 8px;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.25rem;
-    background: var(--inactive-element);
-    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid var(--light-gray-border);
+    transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .item-card:hover {
-    background: var(--option-hover);
-    transform: translateX(4px);
-    border-color: var(--strong-blue);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .item-name {
-    font-weight: 500;
-    color: var(--default-font-color);
-    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .item-actions {
     display: flex;
     gap: 0.5rem;
+    visibility: hidden;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: visibility 0s, opacity 0.2s linear;
 }
 
 .item-card:hover .item-actions {
+    visibility: visible;
     opacity: 1;
 }
 
 .action-button {
-    background: transparent;
+    background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition: background 0.2s ease;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-button:hover {
-    background: rgba(0,0,0,0.1);
+    background-color: #e9e9e9;
 }
 
 .action-button img {
     width: 16px;
     height: 16px;
-    opacity: 0.6;
 }
 
-/* Add Button in Header */
-.add-button-header {
-    padding: 0.5rem 1rem;
-    background: var(--strong-blue);
-    color: var(--white);
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.empty-state {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
-}
-
-.add-button-header:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 136, 204, 0.3);
-}
-
-/* Empty State */
-.empty-state {
+    padding: 2rem;
+    color: #888;
     text-align: center;
-    padding: 3rem 2rem;
-    color: var(--form-input);
-    font-size: 0.95rem;
 }
 
 .empty-state img {
-    width: 48px;
-    height: 48px;
-    opacity: 0.3;
+    width: 64px;
+    height: 64px;
     margin-bottom: 1rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .app-editor-header {
-        padding: 1rem;
-    }
-    
-    .app-title {
-        font-size: 1.25rem;
-    }
-    
-    .main-container {
-        flex-direction: column;
-    }
-    
-    .sidebar-menu {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--light-gray-border);
-        padding: 1rem 0;
-        display: flex;
-        overflow-x: auto;
-    }
-    
-    .menu-item {
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 3px solid transparent;
-        padding: 0.75rem 1rem;
-    }
-    
-    .menu-item:hover,
-    .menu-item.active {
-        border-left: none;
-        border-bottom-color: var(--strong-blue);
-    }
-    
-    .content-area {
-        padding: 1rem;
-    }
-    
-    .items-list {
-        max-height: calc(100vh - 400px);
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar-menu {
-        padding: 0.75rem 0;
-    }
-    
-    .menu-item {
-        font-size: 0.875rem;
-        padding: 0.625rem 0.875rem;
-    }
-    
-    .menu-icon {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .section-header {
-        padding: 1rem;
-    }
-    
-    .section-body {
-        padding: 1rem;
-    }
+    opacity: 0.5;
 }

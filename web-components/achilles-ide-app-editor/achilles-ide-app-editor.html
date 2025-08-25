@@ -1,75 +1,40 @@
-<div class="achilles-ide-app-editor">
+<div class="app-editor-container">
     <div class="app-editor-header">
-        <button class="back-button" data-local-action="goBack" title="Back to Applications">
-            <img src="./wallet/assets/icons/back.svg" alt="back">
-            <span>Back</span>
-        </button>
-        <h2 class="app-title">$$appTitle</h2>
-        <div class="header-spacer"></div>
-    </div>
-    
-    <div class="main-container">
-        <!-- Left Sidebar Menu -->
-        <div class="sidebar-menu">
-            <div class="menu-item $$webSkelActive" data-local-action="selectSection webskel">
-                <img class="menu-icon" src="./wallet/assets/icons/component.svg" alt="components">
-                <span>WebSkel Components</span>
-            </div>
-            <div class="menu-item $$backendActive" data-local-action="selectSection backend">
-                <img class="menu-icon" src="./wallet/assets/icons/plugin.svg" alt="backend">
-                <span>Backend Plugins</span>
-            </div>
-            <div class="menu-item $$documentActive" data-local-action="selectSection document">
-                <img class="menu-icon" src="./wallet/assets/icons/document.svg" alt="document">
-                <span>Document Plugins</span>
-            </div>
+        <div class="header-left">
+            <button class="back-button" data-local-action="goBack">← Back</button>
+            <h1 class="app-title">$$appTitle</h1>
         </div>
-        
-        <!-- Right Content Area -->
-        <div class="content-area">
-            <!-- WebSkel Components Section -->
+        <div class="header-right">
+            <button class="general-button" data-local-action="openCommitModal">Commit & Push</button>
+        </div>
+    </div>
+    <div class="app-editor-body">
+        <div class="editor-menu">
+            <div class="menu-item $$webSkelActive" data-local-action="selectSection webskel">WebSkel Components</div>
+            <div class="menu-item $$backendActive" data-local-action="selectSection backend">Backend Plugins</div>
+            <div class="menu-item $$documentActive" data-local-action="selectSection document">Document Plugins</div>
+        </div>
+        <div class="editor-content">
             <div class="content-section $$webSkelDisplay" data-section="webskel">
                 <div class="section-header">
-                    <h3 class="section-title">WebSkel Components</h3>
-                    <button class="add-button-header" data-local-action="addItem webskel">
-                        <span>+ Add Component</span>
-                    </button>
+                    <h2>WebSkel Components</h2>
+                    <button class="general-button" data-local-action="addItem webskel">+ Add Component</button>
                 </div>
-                <div class="section-body">
-                    <div class="items-list">
-                        $$webSkelItems
-                    </div>
-                </div>
+                <div class="items-list">$$webSkelItems</div>
             </div>
-            
-            <!-- Backend Plugins Section -->
             <div class="content-section $$backendDisplay" data-section="backend">
                 <div class="section-header">
-                    <h3 class="section-title">Backend Plugins</h3>
-                    <button class="add-button-header" data-local-action="addItem backend">
-                        <span>+ Add Plugin</span>
-                    </button>
+                    <h2>Backend Plugins</h2>
+                    <button class="general-button" data-local-action="addItem backend">+ Add Plugin</button>
                 </div>
-                <div class="section-body">
-                    <div class="items-list">
-                        $$backendPluginItems
-                    </div>
-                </div>
+                <div class="items-list">$$backendPluginItems</div>
             </div>
-            
-            <!-- Document Plugins Section -->
             <div class="content-section $$documentDisplay" data-section="document">
                 <div class="section-header">
-                    <h3 class="section-title">Document Plugins</h3>
-                    <button class="add-button-header" data-local-action="addItem document">
-                        <span>+ Add Plugin</span>
-                    </button>
+                    <h2>Document Plugins</h2>
+                    <button class="general-button" data-local-action="addItem document">+ Add Plugin</button>
                 </div>
-                <div class="section-body">
-                    <div class="items-list">
-                        $$documentPluginItems
-                    </div>
-                </div>
+                <div class="items-list">$$documentPluginItems</div>
             </div>
         </div>
     </div>
