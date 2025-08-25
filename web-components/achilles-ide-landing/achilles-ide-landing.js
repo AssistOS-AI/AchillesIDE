@@ -3,6 +3,7 @@ import manager from "../../manager.js"
 const codeManager = assistOS.loadModule("codemanager");
 const chatModule = assistOS.loadModule("chat");
 const webAssistantModule = assistOS.loadModule("webassistant");
+const applicationModule = assistOS.loadModule("application");
 export class AchillesIdeLanding {
     constructor(element, invalidate) {
         this.element = element;
@@ -50,6 +51,7 @@ export class AchillesIdeLanding {
             await assistOS.showToast(`Failed to create app ${e.message}`, "error");
             return;
         }
+        assistOS.space.applications = await applicationModule.getApplications(assistOS.space.id);
         assistOS.showToast("App created!", "success");
         this.appPages = [
             {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
@@ -78,6 +80,7 @@ export class AchillesIdeLanding {
         if (confirmation) {
             try {
                 await codeManager.deleteApp(assistOS.space.id, appName);
+                assistOS.space.applications = assistOS.space.applications.filter(app => app.name !== appName);
                 assistOS.showToast("Application deleted successfully!", "success");
                 this.invalidate();
             } catch (e) {
