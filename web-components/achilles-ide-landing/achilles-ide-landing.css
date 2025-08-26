@@ -1,9 +1,12 @@
-.achilles-ide-landing {
+achilles-ide-landing{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
     padding: 2rem;
-    max-width: 900px;
+    box-sizing: border-box;
 }
 
-.achilles-ide-landing h1 {
+achilles-ide-landing h1 {
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--light-gray-border);
     padding-bottom: 0.5rem;
@@ -100,7 +103,7 @@
     opacity: 1;
 }
 
-.achilles-ide-landing p {
+achilles-ide-landing p {
     font-size: 1.2rem;
     margin-top: 2rem;
 }
@@ -210,4 +213,53 @@
     border-width: 5px;
     border-style: solid;
     border-color: #333 transparent transparent transparent;
+}
+
+.tabs-container {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden; /* Prevents content from overflowing */
+}
+
+.tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--light-gray-border);
+    margin-bottom: 1.5rem;
+    flex-shrink: 0; /* Prevents the header from shrinking */
+}
+
+.tab {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px; /* to align with the border */
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover {
+    color: var(--text-color-primary);
+}
+
+.tab.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+}
+
+.tabs-content {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.tab-content {
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.tab-content.active {
+    display: block;
 }

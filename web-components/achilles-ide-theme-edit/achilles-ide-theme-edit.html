@@ -1,0 +1,31 @@
+<div class="editor-container">
+    <div class="page-header">
+        <div class="left-header">
+            <button class="back-button" data-local-action="goBack">← Back</button>
+            <div class="name-edit-container">
+                <input class="title-input" id="theme-name" placeholder="Enter theme name..." value="$$themeNameValue">
+                <div class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-header">
+        <div class="tabs-list">
+            <div class="tab active" data-tab="variables" data-local-action="selectTab variables">Variables</div>
+            <div class="tab" data-tab="css" data-local-action="selectTab css">Custom CSS</div>
+        </div>
+    </div>
+
+    <div class="tab-content-container">
+        <div class="tab-content active" data-tab-content="variables">
+            <div class="theme-vars-container"></div>
+        </div>
+        <div class="tab-content" data-tab-content="css">
+            <textarea id="custom-css" class="form-input custom-css-editor" placeholder="Enter any custom CSS here..."></textarea>
+        </div>
+    </div>
+
+    <div class="component-editor-footer">
+        <button class="general-button" data-local-action="saveTheme">Save Theme</button>
+    </div>
+</div>

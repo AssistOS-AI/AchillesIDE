@@ -1,18 +1,28 @@
-<div class="achilles-ide-landing">
-    <h1>Achilles IDE</h1>
-    <section class="new-application-section">
-        <div class="input-group">
-            <label for="applicationName">Application Name:</label>
-            <input type="text" id="applicationName" placeholder="Enter application name">
+<h1>Achilles IDE</h1>
+<div class="tabs-container">
+    <div class="tabs-header">
+        <div class="tab $$applicationsTabActive" data-local-action="selectTab applications">Applications</div>
+        <div class="tab $$webAssistantTabActive" data-local-action="selectTab web-assistant">Web Assistant</div>
+    </div>
+    <div class="tabs-content">
+        <div class="tab-content $$applicationsContentActive">
+            <section class="new-application-section">
+                <div class="input-group">
+                    <label for="applicationName">Application Name:</label>
+                    <input type="text" id="applicationName" placeholder="Enter application name">
+                </div>
+                <div class="button-container">
+                    <button class="general-button" data-local-action="newApplication">Create Application</button>
+                    <img class="info-icon" src="./wallet/assets/icons/info.svg" alt="info">
+                </div>
+                <div class="section-header">Your Applications:</div>
+                <div class="apps-list">
+                    $$appsList
+                </div>
+            </section>
         </div>
-        <div class="button-container">
-            <button class="general-button" data-local-action="newApplication">Create Application</button>
-            <img class="info-icon" src="./wallet/assets/icons/info.svg" alt="info">
+        <div class="tab-content $$webAssistantContentActive">
+            <web-assistant data-presenter="web-assistant"></web-assistant>
         </div>
-
-        <div class="section-header">Your Applications:</div>
-        <div class="apps-list">
-            $$appsList
-        </div>
-    </section>
+    </div>
 </div>

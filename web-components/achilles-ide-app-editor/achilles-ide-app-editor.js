@@ -35,6 +35,13 @@ export class AchillesIdeAppEditor {
                 editPage: "achilles-ide-document-plugin-edit",
                 scriptName: "DocumentPluginVibe",
                 items: []
+            },
+            themes: {
+                name: "Themes",
+                editPage: "achilles-ide-theme-edit",
+                listFn: "listThemesForApp",
+                scriptName: "ThemeVibe",
+                items: []
             }
         };
         
@@ -58,18 +65,21 @@ export class AchillesIdeAppEditor {
         this.webSkelItems = this.renderItemsList(this.sections.webskel.items, "webskel");
         this.backendPluginItems = this.renderItemsList(this.sections.backend.items, "backend");
         this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
+        this.themesItems = this.renderItemsList(this.sections.themes.items, "themes");
         
         // Set active classes for menu and content
         this.settingsActive = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelActive = this.activeSection === 'webskel' ? 'active' : '';
         this.backendActive = this.activeSection === 'backend' ? 'active' : '';
         this.documentActive = this.activeSection === 'document' ? 'active' : '';
+        this.themesActive = this.activeSection === 'themes' ? 'active' : '';
         
         // Set display classes for content sections
         this.settingsDisplay = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelDisplay = this.activeSection === 'webskel' ? 'active' : '';
         this.backendDisplay = this.activeSection === 'backend' ? 'active' : '';
         this.documentDisplay = this.activeSection === 'document' ? 'active' : '';
+        this.themesDisplay = this.activeSection === 'themes' ? 'active' : '';
     }
 
     async afterRender() {
@@ -179,6 +189,8 @@ export class AchillesIdeAppEditor {
                     await codeManager.deleteBackendPlugin(assistOS.space.id, this.appName, itemName);
                 } else if (sectionType === 'document') {
                     await codeManager.deleteDocumentPlugin(assistOS.space.id, this.appName, itemName);
+                } else if (sectionType === 'themes') {
+                    await codeManager.deleteTheme(assistOS.space.id, this.appName, itemName);
                 }
                 assistOS.showToast(`${itemName} deleted successfully`, "success");
                 
@@ -194,8 +206,6 @@ export class AchillesIdeAppEditor {
 
     async addItem(target, sectionType) {
         const section = this.sections[sectionType];
-        if (!section) return;
-        
         const url = `achilles-ide-chat-page/${encodeURIComponent(this.appName)}/${section.editPage}`;
         await manager.navigateInternal("achilles-ide-chat-page", url);
     }

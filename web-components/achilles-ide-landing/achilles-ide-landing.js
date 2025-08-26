@@ -8,10 +8,16 @@ export class AchillesIdeLanding {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
+        this.activeTab = "applications";
         this.invalidate();
     }
 
     async beforeRender() {
+        this.applicationsTabActive = this.activeTab === 'applications' ? 'active' : '';
+        this.webAssistantTabActive = this.activeTab === 'web-assistant' ? 'active' : '';
+        this.applicationsContentActive = this.activeTab === 'applications' ? 'active' : '';
+        this.webAssistantContentActive = this.activeTab === 'web-assistant' ? 'active' : '';
+
         let apps = await codeManager.getApps(assistOS.space.id);
         this.appsList = "";
         for(let appName of apps){
@@ -27,11 +33,16 @@ export class AchillesIdeLanding {
     async afterRender() {
         const infoIcon = this.element.querySelector('.info-icon');
         infoIcon?.addEventListener('mouseenter', () => {
-            this.showTooltip("This will create a public repository inside the AssistOS-AI GitHub organization. Please ensure your GitHub token is set in the settings.");
+            this.showTooltip("This will create a public repository inside the AssistOS-apps GitHub organization. Please ensure your GitHub token is set in the settings.");
         });
         infoIcon?.addEventListener('mouseleave', () => {
             this.hideTooltip();
         });
+    }
+
+    selectTab(target, tabId) {
+        this.activeTab = tabId;
+        this.invalidate();
     }
     getChatId(appName, pageName){
         return  appName + `_${pageName}` + "_Chat";
@@ -60,7 +71,7 @@ export class AchillesIdeLanding {
         assistOS.showToast("App created!", "success");
         this.appPages = [
             {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
-            {component: "achilles-ide-persisto", scriptName:"PersistoVibe"},
+            {component: "achilles-ide-theme-edit", scriptName:"ThemeVibe"},
             {component: "achilles-ide-backend-plugin-edit", scriptName:"BackendPluginVibe"},
             {component: "achilles-ide-document-plugin-edit", scriptName: "DocumentPluginVibe"}
         ];
