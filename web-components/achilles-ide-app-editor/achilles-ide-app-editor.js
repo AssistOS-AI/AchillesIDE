@@ -54,10 +54,14 @@ export class AchillesIdeAppEditor {
     async beforeRender() {
         this.appTitle = this.appName;
         let appManifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
-        // Mock data for settings page
+        // Settings page data
         this.readmeContent = `# ${this.appName}\n\nThis is a sample README file for the application. You can edit this content.`;
         this.repositoryUrl = appManifest.repository;
-        
+
+        this.currentTheme = appManifest.theme;
+        const availableThemes = await codeManager.listThemesForApp(assistOS.space.id, this.appName);
+        this.themeSelector = this.renderThemeSelector(availableThemes, this.currentTheme);
+
         // Load items for each section
         await this.loadSectionItems();
         
@@ -104,6 +108,15 @@ export class AchillesIdeAppEditor {
         }
     }
 
+    renderThemeSelector(themes, currentTheme) {
+        if (!themes || themes.length === 0) {
+            return `<p>No themes available.</p>`;
+        }
+        let options = themes.map(theme =>
+            `<option value="${theme}" ${theme === currentTheme ? 'selected' : ''}>${theme}</option>`
+        ).join('');
+        return `<select class="form-input" id="theme-selector" data-local-action="changeTheme">${options}</select>`;
+    }
     renderItemsList(items, sectionType) {
         if (!items || items.length === 0) {
             return `
@@ -212,6 +225,40 @@ export class AchillesIdeAppEditor {
 
     async goBack() {
         await manager.navigateInternal("achilles-ide-landing", "achilles-ide-landing");
+    }
+
+    async changeTheme(target) {
+        const newTheme = target.value;
+        if (newTheme === this.currentTheme) {
+            return;
+        }
+        try {
+            await codeManager.updateAppManifest(assistOS.space.id, this.appName, { theme: newTheme });
+            assistOS.showToast("Theme updated successfully!", "success");
+            this.currentTheme = newTheme;
+        } catch (e) {
+            console.error("Failed to update theme:", e);
+            assistOS.showToast(`Failed to update theme: ${e.message}`, "error");
+            target.value = this.currentTheme;
+        }
+    }
+
+    async pullChanges() {
+        assistOS.UI.showLoading();
+        try {
+            const result = await codeManager.pullApp(assistOS.space.id, this.appName);
+            assistOS.UI.hideLoading();
+            if (result.stdout.includes("Already up to date.")) {
+                assistOS.showToast("Repository is already up to date.", "info", 3000);
+            } else {
+                assistOS.showToast("Pulled changes successfully!", "success");
+                this.invalidate();
+            }
+        } catch (e) {
+            assistOS.UI.hideLoading();
+            console.error("Failed to pull changes:", e);
+            assistOS.showToast(`Failed to pull changes: ${e.message}`, "error");
+        }
     }
 
     async openCommitModal() {

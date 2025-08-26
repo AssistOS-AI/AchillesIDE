@@ -5,6 +5,7 @@
             <h1 class="app-title">$$appTitle</h1>
         </div>
         <div class="header-right">
+            <button class="general-button" data-local-action="pullChanges">Pull</button>
             <button class="general-button" data-local-action="openCommitModal">Commit & Push</button>
         </div>
     </div>
@@ -22,6 +23,10 @@
                     <h2>Settings</h2>
                 </div>
                 <div class="settings-section">
+                    <div class="form-item">
+                        <label for="theme-selector">Application Theme</label>
+                        $$themeSelector
+                    </div>
                     <div class="form-item">
                         <label for="readme-content">README.md</label>
                         <textarea id="readme-content" class="form-input readme-editor">$$readmeContent</textarea>

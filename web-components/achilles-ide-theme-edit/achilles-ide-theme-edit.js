@@ -101,15 +101,23 @@ export class AchillesIdeThemeEdit {
             }
         });
 
-        this.selectTab("", this.activeTab);
+        this.renderPreview();
+        this.selectTab(null, this.activeTab);
     }
 
     selectTab(targetElement, tabId) {
         this.activeTab = tabId;
         this.element.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
         this.element.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.dataset.tabContent === tabId));
-        this.element.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-        this.element.querySelector(`.tab-content[data-tab-content="${tabId}"]`).classList.add('active');
+
+        const styleElement = this.element.querySelector('#preview-style');
+        if (tabId === 'preview') {
+            this.updatePreviewStyles();
+        } else {
+            if (styleElement) {
+                styleElement.textContent = '';
+            }
+        }
     }
 
     renderThemeVarControls() {
@@ -160,6 +168,80 @@ export class AchillesIdeThemeEdit {
             return { isValid: false, message: "This theme name already exists." };
         }
         return { isValid: true };
+    }
+
+    renderPreview() {
+        const previewContainer = this.element.querySelector('.preview-container');
+        previewContainer.innerHTML = `
+            <style id="preview-style"></style>
+            <div class="preview-content">
+                <div class="preview-section">
+                    <h1 style="font-family: var(--font-family-heading); font-size: var(--font-size-h1); color: var(--text-primary);">Heading 1 (font-family-heading, font-size-h1, text-primary)</h1>
+                    <h2 style="font-family: var(--font-family-heading); font-size: var(--font-size-h2); color: var(--text-primary);">Heading 2 (font-size-h2)</h2>
+                    <h3 style="font-family: var(--font-family-heading); font-size: var(--font-size-h3); color: var(--text-secondary);">Heading 3 (font-size-h3, text-secondary)</h3>
+                    <p style="font-family: var(--font-family-base); font-size: var(--font-size-base); line-height: var(--line-height-base); color: var(--text-primary);">
+                        This is a paragraph using the base font styles (font-family-base, font-size-base, line-height-base). It demonstrates the primary text color.
+                    </p>
+                </div>
+
+                <div class="preview-section">
+                    <div class="button-showcase">
+                        <button class="preview-btn primary" style="background-color: var(--primary); color: var(--text-on-primary); padding: var(--padding-base); border-radius: var(--border-radius-base);">Primary Button (primary, text-on-primary, padding-base, border-radius-base)</button>
+                        <button class="preview-btn accent" style="background-color: var(--accent); color: var(--text-on-accent); padding: var(--padding-sm); border-radius: var(--border-radius-sm);">Accent Button (accent, text-on-accent, padding-sm, border-radius-sm)</button>
+                        <button class="preview-btn disabled" style="background-color: var(--disabled-bg); color: var(--disabled-text); padding: var(--padding-lg); border-radius: var(--border-radius-lg);">Disabled (disabled-bg, disabled-text, padding-lg, border-radius-lg)</button>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <div class="card-showcase">
+                        <div class="preview-card" style="background: var(--background-secondary); box-shadow: var(--shadow-sm); border: var(--border-width-base) solid var(--border);">
+                            <p>Card with small shadow (shadow-sm, background-secondary, border)</p>
+                        </div>
+                        <div class="preview-card" style="background: var(--background-secondary); box-shadow: var(--shadow-md);">
+                            <p>Card with medium shadow (shadow-md)</p>
+                        </div>
+                        <div class="preview-card" style="background: var(--background-secondary); box-shadow: var(--shadow-lg);">
+                            <p>Card with large shadow (shadow-lg)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <div class="alert-showcase">
+                        <div class="preview-alert" style="background-color: var(--success); color: var(--text-on-primary);">Success (success)</div>
+                        <div class="preview-alert" style="background-color: var(--warning); color: var(--text-on-primary);">Warning (warning)</div>
+                        <div class="preview-alert" style="background-color: var(--danger); color: var(--text-on-primary);">Danger (danger)</div>
+                        <div class="preview-alert" style="background-color: var(--info); color: var(--text-on-primary);">Info (info)</div>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <input type="text" class="preview-input" style="border: var(--border-width-base) solid var(--border-input);" placeholder="Input field (border-input)">
+                </div>
+            </div>
+        `;
+    }
+
+    updatePreviewStyles() {
+        const styleElement = this.element.querySelector('#preview-style');
+        if (!styleElement) return;
+
+        let cssString = ':root {\n';
+        const themeInputs = this.element.querySelectorAll('.theme-vars-container [name]');
+        themeInputs.forEach(input => {
+            const value = input.value;
+            if (value) {
+                const key = input.name.split('.')[1];
+                cssString += `    --${key}: ${value};\n`;
+            }
+        });
+        cssString += '}\n\n';
+
+        const customCSS = this.element.querySelector('#custom-css').value;
+        if (customCSS) {
+            cssString += customCSS;
+        }
+        styleElement.textContent = cssString;
     }
 
     async goBack() {

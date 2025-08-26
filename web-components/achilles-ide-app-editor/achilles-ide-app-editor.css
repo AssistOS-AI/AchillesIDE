@@ -40,6 +40,11 @@
     margin: 0;
 }
 
+.header-right {
+    display: flex;
+    gap: 0.5rem;
+}
+
 .app-editor-body {
     display: flex;
     flex-grow: 1;
