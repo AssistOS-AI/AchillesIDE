@@ -237,4 +237,8 @@ export class AchillesIdeCodeEdit {
     getCode(){
         return this.state.editorContent;
     }
+    setCode(code){
+        this.textarea.value = code;
+        this.syncHighlight();
+    }
 }

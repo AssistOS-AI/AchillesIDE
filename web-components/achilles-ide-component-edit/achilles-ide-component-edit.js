@@ -177,5 +177,34 @@ export class AchillesIdeComponentEdit {
     async navigateBack() {
         await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}`)
     }
-    
+    async takeWebAssistantAction(action){
+        const html = this.element.querySelector('achilles-ide-code-edit.html-editor');
+        const css = this.element.querySelector('achilles-ide-code-edit.css-editor');
+        const js = this.element.querySelector('achilles-ide-code-edit.js-editor');
+        if(action.html){
+            html.webSkelPresenter.setCode(action.html);
+        }
+        if(action.css){
+            css.webSkelPresenter.setCode(action.css);
+        }
+        if(action.js){
+            js.webSkelPresenter.setCode(action.js);
+        }
+        await assistOS.showToast("Changed applied!", "success");
+    }
+    getUIContext(){
+        const html = this.element.querySelector('achilles-ide-code-edit.html-editor');
+        const css = this.element.querySelector('achilles-ide-code-edit.css-editor');
+        const js = this.element.querySelector('achilles-ide-code-edit.js-editor');
+        const htmlContent = html.webSkelPresenter.getCode();
+        const cssContent = css.webSkelPresenter.getCode();
+        const jsContent = js.webSkelPresenter.getCode();
+        return `Current html is:
+        ${htmlContent}
+        Current css is:
+        ${cssContent}
+        Current js is:
+        ${jsContent}
+        `
+    }
 }
