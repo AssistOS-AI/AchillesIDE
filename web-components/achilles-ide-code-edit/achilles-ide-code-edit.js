@@ -70,9 +70,7 @@ export class AchillesIdeCodeEdit {
         const escapeHTML = str => str
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+            .replace(/>/g, '&gt;');
 
         let result = escapeHTML(text);
 

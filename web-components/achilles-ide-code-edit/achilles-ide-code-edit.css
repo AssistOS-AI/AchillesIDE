@@ -134,6 +134,9 @@ achilles-ide-code-edit {
     white-space: pre;
     word-wrap: normal;
     tab-size: 4;
+    /* Make scrollbars visible */
+    scrollbar-width: auto; /* For Firefox */
+    -ms-overflow-style: auto; /* For IE/Edge */
 }
 
 .code-input {
@@ -192,4 +195,27 @@ achilles-ide-code-edit {
 /* Active line highlight */
 .active-line {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.code-input::-webkit-scrollbar,
+.code-output::-webkit-scrollbar {
+    display: block; /* For Chrome, Safari, and Opera */
+    width: 8px;
+    height: 8px;
+}
+
+.code-input::-webkit-scrollbar-track,
+.code-output::-webkit-scrollbar-track {
+    background: var(--option-hover, #f1f1f1);
+}
+
+.code-input::-webkit-scrollbar-thumb,
+.code-output::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.code-input::-webkit-scrollbar-thumb:hover,
+.code-output::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
