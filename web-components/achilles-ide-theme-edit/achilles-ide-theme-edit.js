@@ -287,7 +287,7 @@ export class AchillesIdeThemeEdit {
 
         try {
             if (this.isNewTheme) {
-                await codeManager.saveTheme(this.spaceId, this.appName, null, cssString, themeName);
+                await codeManager.saveTheme(this.spaceId, this.appName, themeName, cssString);
             } else {
                 await codeManager.saveTheme(this.spaceId, this.appName, this.themeName, cssString, themeName);
             }

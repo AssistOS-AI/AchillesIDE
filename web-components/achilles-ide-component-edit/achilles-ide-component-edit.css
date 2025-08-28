@@ -60,7 +60,9 @@
     opacity: 0.6;
     transition: opacity 0.2s;
 }
-
+.edit-icon.disabled{
+    display: none;
+}
 .edit-icon:hover {
     opacity: 1;
 }

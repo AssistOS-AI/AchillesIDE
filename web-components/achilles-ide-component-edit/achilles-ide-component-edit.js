@@ -1,5 +1,6 @@
 import {getTemplate} from "../../utils/code-templates-utils.js";
 import manager from "../../manager.js"
+const applicationModule = assistOS.loadModule("application");
 
 const codeManager = assistOS.loadModule("codemanager");
 const BLANK = "blank-comp";
@@ -31,6 +32,11 @@ export class AchillesIdeComponentEdit {
     }
 
     async afterRender() {
+        let manifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
+        let editIcon = this.element.querySelector(".edit-icon");
+        if(manifest.entryPoint === this.componentOldName){
+            editIcon.classList.add("disabled");
+        }
         let htmlContext = JSON.parse(JSON.stringify(this.context));
         let cssContext = JSON.parse(JSON.stringify(this.context));
         let jsContext = JSON.parse(JSON.stringify(this.context));

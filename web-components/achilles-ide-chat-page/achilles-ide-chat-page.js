@@ -1,3 +1,5 @@
+const applicationModule = assistOS.loadModule("application");
+const codeManager = assistOS.loadModule("codemanager");
 export class AchillesIdeChatPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -32,12 +34,18 @@ export class AchillesIdeChatPage {
             return reply;
         }
     }
-    getChatUIContext(){
+    async getChatUIContext(){
         let currentPagePresenter = this.element.querySelector(this.currentPage).webSkelPresenter;
-        let chatUIContext = ""
+        let chatUIContext = "";
         if(currentPagePresenter.getUIContext){
             chatUIContext = currentPagePresenter.getUIContext();
         }
+        let appManifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
+        let currentTheme = await codeManager.getTheme(assistOS.space.id, this.appName, appManifest.theme);
+        chatUIContext = chatUIContext + `
+        Current application is named: ${this.appName},
+        current theme is: ${currentTheme}, you must use these styles
+        `;
         return chatUIContext;
     }
     beforeRender(){

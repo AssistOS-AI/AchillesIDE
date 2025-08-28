@@ -233,7 +233,7 @@ export class AchillesIdeAppEditor {
             return;
         }
         try {
-            await codeManager.updateAppManifest(assistOS.space.id, this.appName, { theme: newTheme });
+            await codeManager.changeAppTheme(assistOS.space.id, this.appName, newTheme);
             assistOS.showToast("Theme updated successfully!", "success");
             this.currentTheme = newTheme;
         } catch (e) {
