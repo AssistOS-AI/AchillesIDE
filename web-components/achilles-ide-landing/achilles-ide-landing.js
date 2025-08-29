@@ -53,6 +53,7 @@ export class AchillesIdeLanding {
         const appName = this.element.querySelector("#applicationName").value;
         if (!appName.trim()) {
             assistOS.showToast("Application name is required", "error");
+            assistOS.UI.hideLoading();
             return
         }
         this.appName = appName;

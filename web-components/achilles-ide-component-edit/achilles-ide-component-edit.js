@@ -205,7 +205,9 @@ export class AchillesIdeComponentEdit {
         const htmlContent = html.webSkelPresenter.getCode();
         const cssContent = css.webSkelPresenter.getCode();
         const jsContent = js.webSkelPresenter.getCode();
-        return `Current html is:
+        return `
+        Component name is: ${this.state.componentName}
+        Current html is:
         ${htmlContent}
         Current css is:
         ${cssContent}

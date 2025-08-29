@@ -53,12 +53,12 @@ export class AchillesIdeAppEditor {
 
     async beforeRender() {
         this.appTitle = this.appName;
-        let appManifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
+        this.appManifest = await applicationModule.getApplicationManifest(assistOS.space.id, this.appName);
         // Settings page data
         this.readmeContent = `# ${this.appName}\n\nThis is a sample README file for the application. You can edit this content.`;
-        this.repositoryUrl = appManifest.repository;
+        this.repositoryUrl = this.appManifest.repository;
 
-        this.currentTheme = appManifest.theme;
+        this.currentTheme = this.appManifest.theme;
         const availableThemes = await codeManager.listThemesForApp(assistOS.space.id, this.appName);
         this.themeSelector = this.renderThemeSelector(availableThemes, this.currentTheme);
 
@@ -129,6 +129,10 @@ export class AchillesIdeAppEditor {
         
         return items.map(item => {
             const itemName = typeof item === 'string' ? item : item.name;
+            let hideDeleteButtonClass = "";
+            if(sectionType === "webskel" && itemName === this.appManifest.entryPoint){
+                hideDeleteButtonClass = "invisible";
+            }
             return `
                 <div class="item-card" data-local-action="openItem ${sectionType} ${itemName}">
                     <span class="item-name">${itemName}</span>
@@ -136,7 +140,7 @@ export class AchillesIdeAppEditor {
                         <button class="action-button" data-local-action="editItem ${sectionType} ${itemName}">
                             <img src="./wallet/assets/icons/edit.svg" alt="edit">
                         </button>
-                        <button class="action-button" data-local-action="deleteItem ${sectionType} ${itemName}">
+                        <button class="action-button ${hideDeleteButtonClass}" data-local-action="deleteItem ${sectionType} ${itemName}">
                             <img src="./wallet/assets/icons/delete.svg" alt="delete">
                         </button>
                     </div>
