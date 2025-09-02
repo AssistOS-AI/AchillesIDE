@@ -1,7 +1,7 @@
 @name := ContextChatScript
 @description := "ContextChatScript"
 @role := "guest"
-@components := 'sop:array:[]'
+#@components := 'sop:array:[]'
 
 @history new Table from message timestamp role
 @context new Table from message timestamp role

@@ -1,7 +1,7 @@
-@name := "DocumentPluginVibe"
-@description := "DocumentPluginVibe"
+@name := "ThemeVibe"
+@description := "ThemeVibe"
 @role := "guest"
-@components := 'sop:array:[{"name":"Document Plugins","componentName":"achilles-ide-document-plugin-edit"}]'
+#@components := 'sop:array:[{"name":"Themes","componentName":"achilles-ide-theme-edit"}]'
 
 @history new Table from message timestamp role
 @context new Table from message timestamp role

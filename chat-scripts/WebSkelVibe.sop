@@ -1,7 +1,7 @@
 @name := "WebSkelVibe"
 @description := "WebSkelVibe"
 @role := "guest"
-@components := 'sop:array:[{"name":"Web Components","componentName":"achilles-ide-component-edit"}]'
+#@components := 'sop:array:[{"name":"Web Components","componentName":"achilles-ide-component-edit"}]'
 
 @history new Table from message timestamp role
 @context new Table from message timestamp role
