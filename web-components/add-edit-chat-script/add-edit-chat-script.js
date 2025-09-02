@@ -1,68 +1,75 @@
 const codeManager = assistOS.loadModule("codemanager");
-const chatModule = assistOS.loadModule("chat");
 export class AddEditChatScript {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
         this.spaceId = assistOS.space.id;
-        this.scriptId = this.element.getAttribute('data-script-id');
+        let scriptName = this.element.getAttribute('data-script-name');
+        if(scriptName){
+            this.scriptName = decodeURIComponent(scriptName);
+        }
+
+        let appName = this.element.getAttribute('data-app-name');
+        if(appName){
+            this.appName = decodeURIComponent(appName);
+        }
         this.invalidate();
     }
 
     async beforeRender() {
-        const components = await codeManager.listComponents(this.spaceId);
+        //const components = await codeManager.listComponents(this.spaceId);
 
-        if (this.scriptId) {
-            this.chatScript = await chatModule.getChatScript(assistOS.space.id, this.scriptId);
+        if (this.scriptName) {
+            this.chatScript = await codeManager.getChatScript(assistOS.space.id, this.appName, this.scriptName);
             this.modalTitle = 'Edit Script';
         } else {
             this.modalTitle = 'Add Script';
         }
-        this.componentOptions = components.map(component => {
-            let isChecked =  this.chatScript?.components.find(c => c.componentName === component.componentName) ?  "checked" : "";
-            return `
-                <div class="dropdown-item" data-local-action="toggleCheckbox ${component.componentName}">
-                    <input type="checkbox" value="${component.componentName}" data-name="${component.componentName}" data-app-name="${component.appName}" ${isChecked}>
-                    <label>${component.componentName}</label>
-                    <div class="component-app">${component.appName}</div>
-                </div>
-            `;
-        }).join('');
+        // this.componentOptions = components.map(component => {
+        //     let isChecked =  this.chatScript?.components.find(c => c.componentName === component.componentName) ?  "checked" : "";
+        //     return `
+        //         <div class="dropdown-item" data-local-action="toggleCheckbox ${component.componentName}">
+        //             <input type="checkbox" value="${component.componentName}" data-name="${component.componentName}" data-app-name="${component.appName}" ${isChecked}>
+        //             <label>${component.componentName}</label>
+        //             <div class="component-app">${component.appName}</div>
+        //         </div>
+        //     `;
+        // }).join('');
     }
 
     async afterRender() {
-        if(this.chatScript.name === "DefaultScript")
+        if(this.scriptName === "DefaultChatScript")
         {
             let modalBody = this.element.querySelector('.modal-body');
             modalBody.classList.add('view-only');
         }
         this.nameInput = this.element.querySelector('#script-name');
         this.codeInput = this.element.querySelector('#script-code');
-        this.descriptionInput = this.element.querySelector('#script-description');
-        let roleOptions = [{name: "Guest", value: "guest"},{name: "Member", value: "member"},{name: "Admin", value: "admin"}]
-        assistOS.UI.createElement("custom-select", ".select-role-container", {
-                options: roleOptions,
-            },
-            {
-                "data-width": "230",
-                "data-name": "role",
-                "data-selected": this.chatScript?.role,
-            })
-        this.componentsContainer = this.element.querySelector('.multi-select-container');
-        this.componentList = this.element.querySelector('#component-list');
-        this.selectedItems = this.element.querySelector('.selected-items');
-        this.selectedComponentPills = this.element.querySelector('#selected-components-pills');
-        this.selectedComponentsPlaceholder = this.element.querySelector('#selected-components-placeholder');
+        //this.descriptionInput = this.element.querySelector('#script-description');
+        //let roleOptions = [{name: "Guest", value: "guest"},{name: "Member", value: "member"},{name: "Admin", value: "admin"}]
+        // assistOS.UI.createElement("custom-select", ".select-role-container", {
+        //         options: roleOptions,
+        //     },
+        //     {
+        //         "data-width": "230",
+        //         "data-name": "role",
+        //         "data-selected": this.chatScript?.role,
+        //     })
+        //this.componentsContainer = this.element.querySelector('.multi-select-container');
+        //this.componentList = this.element.querySelector('#component-list');
+        //this.selectedItems = this.element.querySelector('.selected-items');
+        //this.selectedComponentPills = this.element.querySelector('#selected-components-pills');
+        //this.selectedComponentsPlaceholder = this.element.querySelector('#selected-components-placeholder');
 
         if (this.chatScript) {
-            this.nameInput.value = this.chatScript.name;
-            this.codeInput.value = this.chatScript.code || '';
-            this.descriptionInput.value = this.chatScript.description || '';
+            this.nameInput.value = this.scriptName;
+            this.codeInput.value = this.chatScript;
+            //this.descriptionInput.value = this.chatScript.description || '';
         }
-        this.updateSelectedComponents();
+        //this.updateSelectedComponents();
 
-        this.boundClickOutside = this.clickOutside.bind(this);
-        document.addEventListener('click', this.boundClickOutside);
+        //this.boundClickOutside = this.clickOutside.bind(this);
+        //document.addEventListener('click', this.boundClickOutside);
     }
 
     afterUnload() {
@@ -129,30 +136,25 @@ export class AddEditChatScript {
     async saveScript(target) {
         const name = this.nameInput.value.trim();
         const code = this.codeInput.value.trim();
-        const description = this.descriptionInput.value.trim();
-        const selectedCheckboxes = this.componentList.querySelectorAll('input[type="checkbox"]:checked');
-        let components = [];
-        for(let checkBox of selectedCheckboxes){
-            let componentName = checkBox.value;
-            let appName = checkBox.getAttribute("data-app-name");
-            components.push({componentName, appName});
+        //const description = this.descriptionInput.value.trim();
+        // const selectedCheckboxes = this.componentList.querySelectorAll('input[type="checkbox"]:checked');
+        // let components = [];
+        // for(let checkBox of selectedCheckboxes){
+        //     let componentName = checkBox.value;
+        //     let appName = checkBox.getAttribute("data-app-name");
+        //     components.push({componentName, appName});
+        // }
+        // let roleSelect = this.element.querySelector(`custom-select[data-name="role"]`);
+        // let selectedOption = roleSelect.querySelector(`.option[data-selected='true']`);
+        // let role = selectedOption.getAttribute('data-value');
+        let newName;
+        if(this.scriptName){
+            if(this.scriptName !== name) {
+                newName = name;
+            }
         }
-        let roleSelect = this.element.querySelector(`custom-select[data-name="role"]`);
-        let selectedOption = roleSelect.querySelector(`.option[data-selected='true']`);
-        let role = selectedOption.getAttribute('data-value');
-        if (this.scriptId) {
-            const script = {
-                id: this.scriptId,
-                name,
-                code,
-                role,
-                description,
-                components
-            };
-            await chatModule.updateChatScript(assistOS.space.id, this.scriptId, script);
-        } else {
-            await chatModule.createChatScript(assistOS.space.id, name, code, description, components, role);
-        }
+
+        await codeManager.saveChatScript(assistOS.space.id, this.appName, this.scriptName, code, newName);
         assistOS.UI.closeModal(target, true);
     }
 }
