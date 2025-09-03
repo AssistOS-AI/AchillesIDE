@@ -152,6 +152,8 @@ export class AddEditChatScript {
             if(this.scriptName !== name) {
                 newName = name;
             }
+        } else {
+            this.scriptName = name;
         }
 
         await codeManager.saveChatScript(assistOS.space.id, this.appName, this.scriptName, code, newName);

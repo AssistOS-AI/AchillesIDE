@@ -18,9 +18,6 @@ export class AchillesIdeChatPage {
     handleReply(reply){
         try {
             let takeActionMessage = JSON.parse(reply.message);
-            if(takeActionMessage.message){
-                reply.message = takeActionMessage.message;
-            }
             let currentPagePresenter = this.element.querySelector(this.currentPage).webSkelPresenter;
             //called without async
             if(takeActionMessage.action){

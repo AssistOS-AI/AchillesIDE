@@ -78,7 +78,7 @@ export class AchillesIdeLanding {
         ];
         for(let appPage of this.appPages){
             let chatId = this.getChatId(appName, appPage.component);
-            await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, appPage.scriptName, ["User", webAssistant.agentName]);
+            await chatModule.createChat(assistOS.space.id, assistOS.user.email, chatId, manager.appName, appPage.scriptName, ["User", webAssistant.agentName]);
             appPage.chatId = chatId;
         }
         assistOS.UI.hideLoading();

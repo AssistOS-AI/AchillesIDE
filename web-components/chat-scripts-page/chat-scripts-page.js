@@ -1,4 +1,5 @@
 const codeManager = assistOS.loadModule("codemanager");
+import manager from "../../manager.js";
 
 export class ChatScriptsPage {
     constructor(element, invalidate, props) {
@@ -31,7 +32,9 @@ export class ChatScriptsPage {
     }
 
     async openAddChatScriptsModal() {
-        const refreshComponent = await assistOS.UI.showModal("add-edit-chat-script", true);
+        const refreshComponent = await assistOS.UI.showModal("add-edit-chat-script", {
+            "app-name": encodeURIComponent(manager.appName),
+        }, true);
         if (refreshComponent) {
             this.invalidate();
         }
