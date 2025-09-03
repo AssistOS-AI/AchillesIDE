@@ -42,6 +42,13 @@ export class AchillesIdeAppEditor {
                 listFn: "listThemesForApp",
                 scriptName: "ThemeVibe",
                 items: []
+            },
+            scripts: {
+                name: "Chat Scripts",
+                editPage: "achilles-ide-chat-script-edit",
+                listFn: "listChatScriptsForApp",
+                scriptName: "ChatScriptVibe",
+                items: []
             }
         };
         
@@ -70,20 +77,23 @@ export class AchillesIdeAppEditor {
         this.backendPluginItems = this.renderItemsList(this.sections.backend.items, "backend");
         this.documentPluginItems = this.renderItemsList(this.sections.document.items, "document");
         this.themesItems = this.renderItemsList(this.sections.themes.items, "themes");
-        
+        this.chatScriptsItems = this.renderItemsList(this.sections.scripts.items, "scripts");
+
         // Set active classes for menu and content
         this.settingsActive = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelActive = this.activeSection === 'webskel' ? 'active' : '';
         this.backendActive = this.activeSection === 'backend' ? 'active' : '';
         this.documentActive = this.activeSection === 'document' ? 'active' : '';
         this.themesActive = this.activeSection === 'themes' ? 'active' : '';
-        
+        this.scriptsActive = this.activeSection === 'themes' ? 'active' : '';
+
         // Set display classes for content sections
         this.settingsDisplay = this.activeSection === 'settings' ? 'active' : '';
         this.webSkelDisplay = this.activeSection === 'webskel' ? 'active' : '';
         this.backendDisplay = this.activeSection === 'backend' ? 'active' : '';
         this.documentDisplay = this.activeSection === 'document' ? 'active' : '';
         this.themesDisplay = this.activeSection === 'themes' ? 'active' : '';
+        this.scriptsDisplay = this.activeSection === 'themes' ? 'active' : '';
     }
 
     async afterRender() {
@@ -208,6 +218,8 @@ export class AchillesIdeAppEditor {
                     await codeManager.deleteDocumentPlugin(assistOS.space.id, this.appName, itemName);
                 } else if (sectionType === 'themes') {
                     await codeManager.deleteTheme(assistOS.space.id, this.appName, itemName);
+                } else if (sectionType === 'scripts') {
+                    await codeManager.deleteChatScript(this.appName, itemName);
                 }
                 assistOS.showToast(`${itemName} deleted successfully`, "success");
                 

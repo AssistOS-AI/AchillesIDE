@@ -74,7 +74,8 @@ export class AchillesIdeLanding {
             {component: "achilles-ide-component-edit", scriptName:"WebSkelVibe"},
             {component: "achilles-ide-theme-edit", scriptName:"ThemeVibe"},
             {component: "achilles-ide-backend-plugin-edit", scriptName:"BackendPluginVibe"},
-            {component: "achilles-ide-document-plugin-edit", scriptName: "DocumentPluginVibe"}
+            {component: "achilles-ide-document-plugin-edit", scriptName: "DocumentPluginVibe"},
+            {component: "achilles-ide-chat-script-edit", scriptName: "ChatScriptVibe"}
         ];
         for(let appPage of this.appPages){
             let chatId = this.getChatId(appName, appPage.component);

@@ -16,6 +16,7 @@
             <div class="menu-item $$backendActive" data-local-action="selectSection backend">Backend Plugins</div>
             <div class="menu-item $$documentActive" data-local-action="selectSection document">Document Plugins</div>
             <div class="menu-item $$themesActive" data-local-action="selectSection themes">Themes</div>
+            <div class="menu-item $$scriptsActive" data-local-action="selectSection scripts">Chat Scripts</div>
         </div>
         <div class="editor-content">
             <div class="content-section $$settingsDisplay" data-section="settings">
@@ -66,6 +67,13 @@
                     <button class="general-button" data-local-action="addItem themes">+ Add Theme</button>
                 </div>
                 <div class="items-list">$$themesItems</div>
+            </div>
+            <div class="content-section $$scriptsDisplay" data-section="scripts">
+                <div class="section-header">
+                    <h2>Chat Scripts</h2>
+                    <button class="general-button" data-local-action="addItem scripts">+ Add Script</button>
+                </div>
+                <div class="items-list">$$chatScriptsItems</div>
             </div>
         </div>
     </div>
