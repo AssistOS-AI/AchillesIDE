@@ -86,7 +86,7 @@ export class AchillesIdeLanding {
         await this.openAppEditor(null, appName);
     }
     async openAppEditor(target, appName){
-        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(appName)}`);
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(appName)}/settings`);
     }
 
     async deleteApplication(target, appName) {

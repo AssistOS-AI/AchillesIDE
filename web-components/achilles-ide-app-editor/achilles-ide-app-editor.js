@@ -8,10 +8,12 @@ export class AchillesIdeAppEditor {
         this.element = element;
         this.invalidate = invalidate;
         
-        // Extract app name from URL or receive via data attribute
         let urlParts = window.location.hash.split("/");
-        this.appName = decodeURIComponent(urlParts[urlParts.length - 1]);
-        
+        this.appName = decodeURIComponent(urlParts[3]);
+        this.activeSection = urlParts[4];
+        if(!this.activeSection){
+            this.activeSection = "settings";
+        }
         this.sections = {
             settings: {
                 name: "Settings"
@@ -52,9 +54,6 @@ export class AchillesIdeAppEditor {
             }
         };
         
-        // Set default active section
-        this.activeSection = 'settings';
-        
         this.invalidate();
     }
 
@@ -85,7 +84,7 @@ export class AchillesIdeAppEditor {
         this.backendActive = this.activeSection === 'backend' ? 'active' : '';
         this.documentActive = this.activeSection === 'document' ? 'active' : '';
         this.themesActive = this.activeSection === 'themes' ? 'active' : '';
-        this.scriptsActive = this.activeSection === 'themes' ? 'active' : '';
+        this.scriptsActive = this.activeSection === 'scripts' ? 'active' : '';
 
         // Set display classes for content sections
         this.settingsDisplay = this.activeSection === 'settings' ? 'active' : '';
@@ -93,7 +92,7 @@ export class AchillesIdeAppEditor {
         this.backendDisplay = this.activeSection === 'backend' ? 'active' : '';
         this.documentDisplay = this.activeSection === 'document' ? 'active' : '';
         this.themesDisplay = this.activeSection === 'themes' ? 'active' : '';
-        this.scriptsDisplay = this.activeSection === 'themes' ? 'active' : '';
+        this.scriptsDisplay = this.activeSection === 'scripts' ? 'active' : '';
     }
 
     async afterRender() {
@@ -162,7 +161,10 @@ export class AchillesIdeAppEditor {
     selectSection(target, sectionKey) {
         // Update active section
         this.activeSection = sectionKey;
-        
+
+        let urlParts = window.location.hash.split("/");
+        urlParts[urlParts.length - 1] = sectionKey;
+        window.location.hash = urlParts.join("/");
         // Update menu items
         this.element.querySelectorAll('.menu-item').forEach(item => {
             item.classList.remove('active');

@@ -181,7 +181,7 @@ export class AchillesIdeComponentEdit {
     }
 
     async navigateBack() {
-        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}`)
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}/webskel`)
     }
     async takeWebAssistantAction(action){
         const html = this.element.querySelector('achilles-ide-code-edit.html-editor');

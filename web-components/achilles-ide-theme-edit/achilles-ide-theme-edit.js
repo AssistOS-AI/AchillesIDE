@@ -245,7 +245,7 @@ export class AchillesIdeThemeEdit {
     }
 
     async goBack() {
-        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}`);
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}/themes`);
     }
 
     async saveTheme() {

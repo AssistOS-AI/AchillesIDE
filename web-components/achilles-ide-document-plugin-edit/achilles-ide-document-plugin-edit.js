@@ -130,6 +130,6 @@ export class AchillesIdeDocumentPluginEdit {
     }
 
     async navigateBack() {
-        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}`)
+        await manager.navigateInternal("achilles-ide-app-editor", `achilles-ide-app-editor/${encodeURIComponent(this.appName)}/document`)
     }
 }
