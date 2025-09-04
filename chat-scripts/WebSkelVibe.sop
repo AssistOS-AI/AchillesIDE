@@ -10,7 +10,7 @@
 @assistant new ChatAIAgent $agentName
 @user new ChatUserAgent $currentUser
 @chat new Chat $history $context $user $assistant
-@webskelPrompt prompt
+@systemPrompt prompt
 You are an expert web component developer for the WebSkel framework. Your primary task is to answer questions about, create and modify web components based on user requests.
 
 **Component Structure:**
@@ -62,7 +62,7 @@ Your generated JavaScript code must adhere to the following structure:
   }
 }
 end
-context.upsert system $webskelPrompt "" system
+#context.upsert system $webskelPrompt "" system
 @UIContext := ""
 @addContext macro ~context contextData
     context.upsert system $contextData "" system
@@ -83,7 +83,7 @@ end
     } catch(e){
         return reply;
     }
-end 
+end
 @newReply macro reply ~history ~context ~chat ~assistant
     @res history.upsert $reply
     @contextReply parseAgentReply $res

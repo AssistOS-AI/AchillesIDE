@@ -12,7 +12,12 @@
 @chat new Chat $history $context $user $assistant
 @UIContext := ""
 
-context.upsert system [ assistant.getSystemPrompt ] "" system
+#context.upsert system [ assistant.getSystemPrompt ] "" system
+@systemPrompt := [ assistant.getSystemPrompt ]
+
+@addContext macro ~context contextData
+    context.upsert system $contextData "" system
+end
 @newReply macro reply ~history ~context ~chat ~assistant
     @res history.upsert $reply
     context.upsert $res
