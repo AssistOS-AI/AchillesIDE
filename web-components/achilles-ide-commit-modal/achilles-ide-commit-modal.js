@@ -3,8 +3,7 @@ export class AchillesIdeCommitModal {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;
-        let urlParts = window.location.hash.split("/");
-        this.appName = decodeURIComponent(urlParts[urlParts.length - 1]);
+        this.appName = decodeURIComponent(this.element.getAttribute("data-app-name"));
         this.invalidate();
     }
 

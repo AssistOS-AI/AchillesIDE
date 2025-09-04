@@ -280,7 +280,7 @@ export class AchillesIdeAppEditor {
     }
 
     async openCommitModal() {
-        await assistOS.UI.showModal("achilles-ide-commit-modal", { appName: this.appName });
+        await assistOS.UI.showModal("achilles-ide-commit-modal", { "app-name": encodeURIComponent(this.appName) });
     }
 
     async saveReadme() {
